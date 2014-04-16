@@ -126,9 +126,9 @@
 # Top-level metadata
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
-Name: python3
+Name: python34u
 Version: %{pybasever}.0
-Release: 1%{?dist}
+Release: 2.ius%{?dist}
 License: Python
 Group: Development/Languages
 
@@ -147,7 +147,7 @@ BuildRequires: db4-devel >= 4.7
 
 # expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  We use
 # it (in pyexpat) in order to enable the fix in Python-3.2.3 for CVE-2012-0876:
-BuildRequires: expat-devel >= 2.1.0
+BuildRequires: expat-devel
 
 BuildRequires: findutils
 BuildRequires: gcc-c++
@@ -712,7 +712,7 @@ Group:          Development/Libraries
 # this symbol (in pyexpat), so we must explicitly state this dependency to
 # prevent "import pyexpat" from failing with a linker error if someone hasn't
 # yet upgraded expat:
-Requires: expat >= 2.1.0
+Requires: expat
 
 %description libs
 This package contains files used to embed Python 3 into applications.
@@ -756,7 +756,7 @@ The test modules from the main %{name} package.
 These are in a separate package to save space, as they are almost never used
 in production.
 
-You might want to install the python3-test package if you're developing
+You might want to install the %{name}-test package if you're developing
 python 3 code that uses more than just unittest and/or test_support.py.
 
 %if 0%{?with_debug_build}
@@ -775,7 +775,7 @@ Requires: %{name}-tkinter%{?_isa} = %{version}-%{release}
 Requires: %{name}-tools%{?_isa} = %{version}-%{release}
 
 %description debug
-python3-debug provides a version of the Python 3 runtime with numerous debugging
+%{name}-debug provides a version of the Python 3 runtime with numerous debugging
 features enabled, aimed at advanced Python users, such as developers of Python
 extension modules.
 
@@ -1539,10 +1539,12 @@ rm -fr %{buildroot}
 %{pylibdir}/ensurepip/__pycache__/*%{bytecode_suffixes}
 %exclude %{pylibdir}/ensurepip/_bundled
 
+%if 0%{?with_rewheel}
 %dir %{pylibdir}/ensurepip/rewheel/
 %dir %{pylibdir}/ensurepip/rewheel/__pycache__/
 %{pylibdir}/ensurepip/rewheel/*.py
 %{pylibdir}/ensurepip/rewheel/__pycache__/*%{bytecode_suffixes}
+%endif
 
 %{pylibdir}/html
 %{pylibdir}/http
@@ -1797,6 +1799,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Wed Apr 16 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.0-2.ius
+- porting from koji SRPM, http://kojipkgs.fedoraproject.org//work/tasks/9935/6739935/python3-3.4.0-1.fc21.src.rpm
+
 * Tue Apr 15 2014 Matej Stuchlik <mstuchli@redhat.com> - 3.4.0-1
 - Update to Python 3.4 final
 - Add patch adding the rewheel module
