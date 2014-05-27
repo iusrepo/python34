@@ -131,6 +131,10 @@ Version: %{pybasever}.0
 Release: 2.ius%{?dist}
 License: Python
 Group: Development/Languages
+# conflict with other IUS python3 packages
+Conflicts: python33
+Conflicts: python32
+Conflicts: python31
 
 
 # =======================
