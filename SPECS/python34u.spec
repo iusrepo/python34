@@ -129,8 +129,8 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-Version: %{pybasever}.0
-Release: 2.ius%{?dist}
+Version: %{pybasever}.1
+Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -656,14 +656,16 @@ Patch189: 00189-add-rewheel-module.patch
 # Fix tests with SQLite >= 3.8.4
 # http://bugs.python.org/issue20901
 # http://hg.python.org/cpython/rev/4d626a9df062
-Patch190: 00190-fix-tests-with-sqlite-3.8.4.patch
+# FIXED UPSTREAM
+# Patch190: 00190-fix-tests-with-sqlite-3.8.4.patch
 
 # 00193
 #
 # Skip correct number of *.pyc file bytes in ModuleFinder.load_module
 # rhbz#1060338
 # http://bugs.python.org/issue20778
-Patch193: 00193-skip-correct-num-of-pycfile-bytes-in-modulefinder.patch
+# FIXED UPSTREAM
+# Patch193: 00193-skip-correct-num-of-pycfile-bytes-in-modulefinder.patch
 
 # 00195
 #
@@ -938,8 +940,8 @@ done
 %patch189 -p1
 %endif
 
-%patch190 -p1
-%patch193 -p1
+# 00190: upstream as of Python 3.4.1
+# 00193: upstream as of Python 3.4.1
 %patch195 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
