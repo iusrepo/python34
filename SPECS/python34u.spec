@@ -712,6 +712,11 @@ Provides: python(abi) = %{pybasever}
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
+%if 0%{with_rewheel}
+Requires: python%{iusver}-setuptools
+Requires: python%{iusver}-pip
+%endif
+
 %description
 Python 3 is a new version of the language that is incompatible with the 2.x
 line of releases. The language is mostly the same, but many details, especially
