@@ -9,6 +9,8 @@
 # pybasever without the dot:
 %global pyshortver 34
 
+%global iusver %{pyshortver}u
+
 %global pylibdir %{_libdir}/python%{pybasever}
 %global dynload_dir %{pylibdir}/lib-dynload
 
@@ -126,7 +128,7 @@
 # Top-level metadata
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
-Name: python34u
+Name: python%{iusver}
 Version: %{pybasever}.0
 Release: 2.ius%{?dist}
 License: Python
@@ -191,8 +193,8 @@ BuildRequires: xz-devel
 BuildRequires: zlib-devel
 
 %if 0%{?with_rewheel}
-BuildRequires: python3-setuptools
-BuildRequires: python3-pip
+BuildRequires: python%{iusver}-setuptools
+BuildRequires: python%{iusver}-pip
 %endif
 
 
