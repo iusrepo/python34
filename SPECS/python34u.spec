@@ -1274,9 +1274,9 @@ find %{buildroot} \
     -perm 555 -exec chmod 755 {} \;
 
 # Install macros for rpm:
-mkdir -p %{buildroot}/%{_sysconfdir}/rpm
-install -m 644 %{SOURCE2} %{buildroot}/%{_sysconfdir}/rpm
-install -m 644 %{SOURCE3} %{buildroot}/%{_sysconfdir}/rpm
+mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
+install -m 644 %{SOURCE2} %{buildroot}/%{_rpmconfigdir}/macros.d/
+install -m 644 %{SOURCE3} %{buildroot}/%{_rpmconfigdir}/macros.d/
 
 # Ensure that the curses module was linked against libncursesw.so, rather than
 # libncurses.so (bug 539917)
@@ -1640,8 +1640,8 @@ rm -fr %{buildroot}
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
 %{_libdir}/pkgconfig/python3.pc
-%{_sysconfdir}/rpm/macros.python3
-%{_sysconfdir}/rpm/macros.pybytecompile
+%{_rpmconfigdir}/macros.d/macros.python3
+%{_rpmconfigdir}/macros.d/macros.pybytecompile
 
 %files tools
 %defattr(-,root,root,755)
