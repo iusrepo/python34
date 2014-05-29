@@ -86,11 +86,11 @@
 # (/usr/bin/python, rather than the freshly built python), thus leading to
 # numerous syntax errors, and incorrect magic numbers in the .pyc files.  We
 # thus override __os_install_post to avoid invoking this script:
-%global __os_install_post /usr/lib/rpm/brp-compress \
-  %{!?__debug_package:/usr/lib/rpm/brp-strip %{__strip}} \
-  /usr/lib/rpm/brp-strip-static-archive %{__strip} \
-  /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump} \
-  /usr/lib/rpm/brp-python-hardlink
+%global __os_install_post /usr/lib/rpm/redhat/brp-compress \
+  %{!?__debug_package:/usr/lib/rpm/redhat/brp-strip %{__strip}} \
+  /usr/lib/rpm/redhat/brp-strip-static-archive %{__strip} \
+  /usr/lib/rpm/redhat/brp-strip-comment-note %{__strip} %{__objdump} \
+  /usr/lib/rpm/redhat/brp-python-hardlink
 # to remove the invocation of brp-python-bytecompile, whilst keeping the
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
@@ -129,7 +129,8 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-Version: %{pybasever}.1
+#Version: %{pybasever}.1
+Version: 3.4.1
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
@@ -1833,7 +1834,6 @@ rm -fr %{buildroot}
 - Install macros in _rpmconfigdir
 - Add macro %%python3_version_nodots
 - Enable loading sqlite extensions (rhbz#1066938)
-- Point __os_install_post to correct brp-* files
 - Add iusver macro, and use it
 - Don't add Werror=declaration-after-statement for extension modules through setup.py (PyBT#21121)
 - Latest upstream source, patches 190 and 193 merged upstream
