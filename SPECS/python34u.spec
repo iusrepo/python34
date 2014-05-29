@@ -1828,6 +1828,18 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Thu May 29 2014 Carl George <carl.george@rackspace.com> - 3.4.1-1.ius
+- Add conflicts for other IUS python3 packages
+- Install macros in _rpmconfigdir
+- Add macro %%python3_version_nodots
+- Enable loading sqlite extensions (rhbz#1066938)
+- Point __os_install_post to correct brp-* files
+- Add iusver macro, and use it
+- Don't add Werror=declaration-after-statement for extension modules through setup.py (PyBT#21121)
+- Latest upstream source, patches 190 and 193 merged upstream
+- Fix multilib dependencies (rhbz#1091815)
+- Rename python3.Xm-config script to arch specific (rhbz#1091815)
+
 * Wed Apr 16 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.0-2.ius
 - porting from koji SRPM, http://kojipkgs.fedoraproject.org//work/tasks/9935/6739935/python3-3.4.0-1.fc21.src.rpm
 
