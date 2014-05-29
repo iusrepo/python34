@@ -665,6 +665,13 @@ Patch190: 00190-fix-tests-with-sqlite-3.8.4.patch
 # http://bugs.python.org/issue20778
 Patch193: 00193-skip-correct-num-of-pycfile-bytes-in-modulefinder.patch
 
+# 00195
+#
+# Don't declare Werror=declaration-after-statement for extension
+# modules through setup.py
+# http://bugs.python.org/issue21121
+Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
+
 # (New patches go here ^^^)
 #
 # When adding new patches to "python" and "python3" in Fedora 17 onwards,
@@ -933,6 +940,7 @@ done
 
 %patch190 -p1
 %patch193 -p1
+%patch195 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
