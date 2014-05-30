@@ -129,8 +129,7 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-#Version: %{pybasever}.1
-Version: 3.4.1
+Version: %{pybasever}.1
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
