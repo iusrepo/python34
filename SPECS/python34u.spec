@@ -130,7 +130,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.1
-Release: 1.ius%{?dist}
+Release: 2.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1828,6 +1828,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Wed Jun 18 2014 Carl George <carl.george@rackspace.com> - 3.4.2-1.ius
+- Macros in %{_rpmconfigdir}/macros.d are not automatically loaded, move them back to %{_sysconfdir}/rpm
+
 * Thu May 29 2014 Carl George <carl.george@rackspace.com> - 3.4.1-1.ius
 - Add conflicts for other IUS python3 packages
 - Install macros in _rpmconfigdir
