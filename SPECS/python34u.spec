@@ -756,7 +756,11 @@ Group:          Development/Libraries
 # this symbol (in pyexpat), so we must explicitly state this dependency to
 # prevent "import pyexpat" from failing with a linker error if someone hasn't
 # yet upgraded expat:
-Requires: expat
+%if 0%{?rhel} < 7
+Requires: expat21
+%else
+Requires: expat >= 2.1.0
+%endif
 
 %description libs
 This package contains files used to embed Python 3 into applications.
