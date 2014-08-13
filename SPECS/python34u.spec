@@ -73,7 +73,7 @@
 %global with_systemtap 1
 
 # some arches don't have valgrind so we need to disable its support on them
-%ifarch %{ix86} x86_64 ppc %{power64} s390x %{arm}
+%ifnarch s390 ppc64le
 %global with_valgrind 1
 %else
 %global with_valgrind 0
