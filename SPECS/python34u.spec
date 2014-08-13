@@ -14,7 +14,7 @@
 # 4) python34u-setuptools and python34u-pip with with_rewheel set to 1
 # 5) python34u with with_rewheel set to 1
 
-%global with_rewheel 0
+%global with_rewheel 1
 
 %global pybasever 3.4
 
@@ -150,7 +150,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.1
-Release: 2.ius%{?dist}
+Release: 3.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1869,7 +1869,15 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
-* Wed Jun 18 2014 Carl George <carl.george@rackspace.com> - 3.4.2-1.ius
+* Wed Aug 13 2014 Carl George <carl.george@rackspace.com> - 3.4.1-3.ius
+- Install macros in _rpmconfigdir on el7
+- Point __os_install_post to correct brp-* files on el7
+- In config script, use uname -m to write the arch
+- Use the correct version of expat/expat-devel
+- Enable rewheel
+
+
+* Wed Jun 18 2014 Carl George <carl.george@rackspace.com> - 3.4.1-2.ius
 - Macros in %{_rpmconfigdir}/macros.d are not automatically loaded, move them back to %{_sysconfdir}/rpm
 
 * Thu May 29 2014 Carl George <carl.george@rackspace.com> - 3.4.1-1.ius
