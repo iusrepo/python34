@@ -1368,8 +1368,10 @@ sed \
 %endif # with_systemtap
 
 # Rename the script that differs on different arches to arch specific name
-mv %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-{,%{_arch}-}config
+mv %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-{,`uname -m`-}config
 echo -e '#!/bin/sh\nexec `dirname $0`/python%{LDVERSION_optimized}-`uname -m`-config "$@"' > \
+  %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
+echo '[ $? -eq 127 ] && echo "Could not find python%{LDVERSION_optimized}-`uname -m`-config. Look around to see available arches." >&2' >> \
   %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
   chmod +x %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
 
@@ -1666,7 +1668,7 @@ rm -fr %{buildroot}
 %{_bindir}/python3-config
 %{_bindir}/python%{pybasever}-config
 %{_bindir}/python%{LDVERSION_optimized}-config
-%{_bindir}/python%{LDVERSION_optimized}-%{_arch}-config
+%{_bindir}/python%{LDVERSION_optimized}-*-config
 %{_libdir}/libpython%{LDVERSION_optimized}.so
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
