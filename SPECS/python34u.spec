@@ -173,7 +173,11 @@ BuildRequires: db4-devel >= 4.7
 
 # expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  We use
 # it (in pyexpat) in order to enable the fix in Python-3.2.3 for CVE-2012-0876:
-BuildRequires: expat-devel
+%if 0%{?rhel} < 7
+BuildRequires: expat21-devel
+%else
+BuildRequires: expat-devel >= 2.1.0
+%endif
 
 BuildRequires: findutils
 BuildRequires: gcc-c++
