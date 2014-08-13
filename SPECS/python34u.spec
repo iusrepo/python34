@@ -171,13 +171,19 @@ BuildRequires: bzip2
 BuildRequires: bzip2-devel
 BuildRequires: db4-devel >= 4.7
 
-# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  We use
-# it (in pyexpat) in order to enable the fix in Python-3.2.3 for CVE-2012-0876:
-%if 0%{?rhel} < 7
-BuildRequires: expat21-devel
-%else
-BuildRequires: expat-devel >= 2.1.0
-%endif
+# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  Fedora
+# requires this version to account for CVE-2012-0876.  However, that symbol was
+# backported when the CVE was patched in el6, so I don't believe we need it for
+# IUS.
+#
+# $ rpm -qf /lib64/libexpat.so.1
+# expat-2.0.1-11.el6_2.x86_64
+# $ strings /lib64/libexpat.so.1 | grep XML_SetHash
+# XML_SetHashSalt
+#
+# https://rhn.redhat.com/errata/RHSA-2012-0731.html#Red Hat Enterprise Linux Server (v. 6)
+# https://bugzilla.redhat.com/show_bug.cgi?id=821337
+BuildRequires: expat-devel
 
 BuildRequires: findutils
 BuildRequires: gcc-c++
@@ -752,15 +758,19 @@ Summary:        Python 3 runtime libraries
 Group:          Development/Libraries
 #Requires:       %{name} = %{version}-%{release}
 
-# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  We use
-# this symbol (in pyexpat), so we must explicitly state this dependency to
-# prevent "import pyexpat" from failing with a linker error if someone hasn't
-# yet upgraded expat:
-%if 0%{?rhel} < 7
-Requires: expat21
-%else
-Requires: expat >= 2.1.0
-%endif
+# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  Fedora
+# requires this version to account for CVE-2012-0876.  However, that symbol was
+# backported when the CVE was patched in el6, so I don't believe we need it for
+# IUS.
+#
+# $ rpm -qf /lib64/libexpat.so.1
+# expat-2.0.1-11.el6_2.x86_64
+# $ strings /lib64/libexpat.so.1 | grep XML_SetHash
+# XML_SetHashSalt
+#
+# https://rhn.redhat.com/errata/RHSA-2012-0731.html#Red Hat Enterprise Linux Server (v. 6)
+# https://bugzilla.redhat.com/show_bug.cgi?id=821337
+Requires: expat
 
 %description libs
 This package contains files used to embed Python 3 into applications.
@@ -1873,7 +1883,6 @@ rm -fr %{buildroot}
 - Install macros in _rpmconfigdir on el7
 - Point __os_install_post to correct brp-* files on el7
 - In config script, use uname -m to write the arch
-- Use the correct version of expat/expat-devel
 - Enable rewheel
 
 
