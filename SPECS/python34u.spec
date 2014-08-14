@@ -1440,7 +1440,11 @@ CheckPython() {
   # our non-standard decorators take effect on the relevant tests:
   #   @unittest._skipInRpmBuild(reason)
   #   @unittest._expectedFailureInRpmBuild
+  # Set LC_CTYPE=en_US.utf8 because ensurepip tests break if there are unicode
+  # characters in wheel METADATA files.  May be due to poor unicode support in
+  # the rewheel module.
   WITHIN_PYTHON_RPM_BUILD= \
+  LC_CTYPE=en_US.utf8 \
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
     --verbose --findleaks
 
@@ -1884,7 +1888,7 @@ rm -fr %{buildroot}
 - Point __os_install_post to correct brp-* files on el7
 - In config script, use uname -m to write the arch
 - Enable rewheel
-
+- Work around unicode failures in test suite by setting LC_CTYPE=en_US.utf8
 
 * Wed Jun 18 2014 Carl George <carl.george@rackspace.com> - 3.4.1-2.ius
 - Macros in %{_rpmconfigdir}/macros.d are not automatically loaded, move them back to %{_sysconfdir}/rpm
