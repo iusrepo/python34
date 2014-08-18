@@ -150,7 +150,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.1
-Release: 3.ius%{?dist}
+Release: 4.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1440,11 +1440,7 @@ CheckPython() {
   # our non-standard decorators take effect on the relevant tests:
   #   @unittest._skipInRpmBuild(reason)
   #   @unittest._expectedFailureInRpmBuild
-  # Set LC_CTYPE=en_US.utf8 because ensurepip tests break if there are unicode
-  # characters in wheel METADATA files.  May be due to poor unicode support in
-  # the rewheel module.
   WITHIN_PYTHON_RPM_BUILD= \
-  LC_CTYPE=en_US.utf8 \
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
     --verbose --findleaks
 
@@ -1883,6 +1879,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Mon Aug 18 2014 Carl George <carl.george@rackspace.com> - 3.4.1-4.ius
+- Update the rewheel module to be unicode safe, remove work around
+
 * Wed Aug 13 2014 Carl George <carl.george@rackspace.com> - 3.4.1-3.ius
 - Install macros in _rpmconfigdir on el7
 - Point __os_install_post to correct brp-* files on el7
