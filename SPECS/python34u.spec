@@ -704,6 +704,10 @@ Patch189: 00189-add-rewheel-module.patch
 # http://bugs.python.org/issue21121
 Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
 
+# test.test_readline.TestReadline fails on el < 7
+# upstream does not this as regression so we will just skip this test
+Patch196: 00196-disable_test_readline.TestReadline.patch
+
 # (New patches go here ^^^)
 #
 # When adding new patches to "python" and "python3" in Fedora 17 onwards,
@@ -987,6 +991,10 @@ done
 # 00190: upstream as of Python 3.4.1
 # 00193: upstream as of Python 3.4.1
 #%patch195 -p1
+
+%if 0%{?rhel} < 7
+%patch196 -p1
+%endif
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1880,9 +1888,10 @@ rm -fr %{buildroot}
 %changelog
 * Wed Oct 08 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.2-1.ius
 - update to lastest
-- disable patch195, patched upstream
+- disable Patch195, patched upstream
 - removed %files %{pylibdir}/turtledemo/*.txt
-- update Patch00156
+- update Patch156
+- add Patch196
 
 * Mon Aug 18 2014 Carl George <carl.george@rackspace.com> - 3.4.1-4.ius
 - Update the rewheel module to be unicode safe, remove work around
