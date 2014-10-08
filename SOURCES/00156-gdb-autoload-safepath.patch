@@ -21,7 +21,7 @@ diff -up Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-3.2.3/Li
  BREAKPOINT_FN='builtin_id'
  
  class DebuggerTests(unittest.TestCase):
-@@ -106,15 +119,28 @@ class DebuggerTests(unittest.TestCase):
+@@ -146,15 +146,28 @@
                      'set print entry-values no',
  
                      'run']
@@ -45,7 +45,7 @@ diff -up Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-3.2.3/Li
          # print commands
  
          # Use "commands" to generate the arguments with which to invoke "gdb":
-         args = ["gdb", "--batch"]
+         args = ["gdb", "--batch", "-nx"]
 +        args += ['--init-eval-command=%s' % cmd for cmd in init_commands]
          args += ['--eval-command=%s' % cmd for cmd in commands]
          args += ["--args",

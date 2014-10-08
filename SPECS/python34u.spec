@@ -149,8 +149,8 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-Version: %{pybasever}.1
-Release: 4.ius%{?dist}
+Version: %{pybasever}.2
+Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -986,7 +986,7 @@ done
 
 # 00190: upstream as of Python 3.4.1
 # 00193: upstream as of Python 3.4.1
-%patch195 -p1
+#%patch195 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1736,7 +1736,6 @@ rm -fr %{buildroot}
 %{pylibdir}/__pycache__/turtle*%{bytecode_suffixes}
 %dir %{pylibdir}/turtledemo
 %{pylibdir}/turtledemo/*.py
-%{pylibdir}/turtledemo/*.txt
 %{pylibdir}/turtledemo/*.cfg
 %dir %{pylibdir}/turtledemo/__pycache__/
 %{pylibdir}/turtledemo/__pycache__/*%{bytecode_suffixes}
@@ -1879,6 +1878,12 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Wed Oct 08 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.2-1.ius
+- update to lastest
+- disable patch195, patched upstream
+- removed %files %{pylibdir}/turtledemo/*.txt
+- update Patch00156
+
 * Mon Aug 18 2014 Carl George <carl.george@rackspace.com> - 3.4.1-4.ius
 - Update the rewheel module to be unicode safe, remove work around
 
