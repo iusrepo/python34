@@ -1,7 +1,7 @@
-diff -up Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-3.2.3/Lib/test/test_gdb.py
---- Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath	2012-04-30 17:16:24.092706954 -0400
-+++ Python-3.2.3/Lib/test/test_gdb.py	2012-04-30 17:17:13.275703592 -0400
-@@ -46,6 +46,19 @@ def gdb_has_frame_select():
+diff -Naurp a/Lib/test/test_gdb.py b/Lib/test/test_gdb.py
+--- a/Lib/test/test_gdb.py	2015-02-25 05:27:45.000000000 -0600
++++ b/Lib/test/test_gdb.py	2015-02-26 08:08:57.115018028 -0600
+@@ -88,6 +88,19 @@ def gdb_has_frame_select():
  
  HAS_PYUP_PYDOWN = gdb_has_frame_select()
  
@@ -21,11 +21,10 @@ diff -up Python-3.2.3/Lib/test/test_gdb.py.gdb-autoload-safepath Python-3.2.3/Li
  BREAKPOINT_FN='builtin_id'
  
  class DebuggerTests(unittest.TestCase):
-@@ -146,15 +146,28 @@
-                     'set print entry-values no',
+@@ -145,15 +158,27 @@ class DebuggerTests(unittest.TestCase):
+         if (gdb_major_version, gdb_minor_version) >= (7, 4):
+             commands += ['set print entry-values no']
  
-                     'run']
-+
 +        if HAS_AUTOLOAD_SAFEPATH:
 +            # Recent GDBs will only auto-load scripts from certain safe
 +            # locations.
