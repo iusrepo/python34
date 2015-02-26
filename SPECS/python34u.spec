@@ -149,7 +149,7 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-Version: %{pybasever}.2
+Version: %{pybasever}.3
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
@@ -1887,6 +1887,12 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Wed Feb 25 2015 Carl George <carl.george@rackspace.com> - 3.4.3-1.ius
+- Latest upstream
+- Refresh patch137, patch156
+- Refresh patch153 (partially merged upstream)
+- Removed patch196 (resolved upstream)
+
 * Wed Oct 08 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.2-1.ius
 - update to lastest
 - disable Patch195, patched upstream
