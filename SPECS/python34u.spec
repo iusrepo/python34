@@ -707,8 +707,7 @@ Patch189: 00189-add-rewheel-module.patch
 
 # test.test_readline.TestReadline fails on el < 7
 # upstream does not this as regression so we will just skip this test
-# FIXED UPSTREAM
-# Patch196: 00196-disable_test_readline.TestReadline.patch
+Patch196: 00196-disable_test_readline.TestReadline.patch
 
 # (New patches go here ^^^)
 #
@@ -994,7 +993,7 @@ done
 # 00193: upstream as of Python 3.4.1
 # 00195: upstream as of Python 3.4.2
 %if 0%{?rhel} < 7
-# 00196: upstream as of Python 3.4.3
+%patch196 -p1
 %endif
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
@@ -1891,7 +1890,7 @@ rm -fr %{buildroot}
 - Latest upstream
 - Refresh patch137, patch156
 - Refresh patch153 (partially merged upstream)
-- Removed patch196 (resolved upstream)
+- Refresh patch196 (upstream tried to fix but failed)
 
 * Wed Oct 08 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.2-1.ius
 - update to lastest

@@ -1,0 +1,21 @@
+We shouldn't have to patch this, but the upstream check doesn't work correctly.
+Look into this further later.
+
+https://hg.python.org/cpython/file/b4cbecbc0781/Lib/test/test_readline.py#l48
+http://bugs.python.org/issue19884
+http://bugs.python.org/issue22773
+
+diff -Naurp a/Lib/test/test_readline.py b/Lib/test/test_readline.py
+--- a/Lib/test/test_readline.py	2015-02-25 05:27:45.000000000 -0600
++++ b/Lib/test/test_readline.py	2015-02-26 15:24:02.513438844 -0600
+@@ -45,9 +45,7 @@ class TestHistoryManipulation (unittest.
+ 
+ class TestReadline(unittest.TestCase):
+ 
+-    @unittest.skipIf(readline._READLINE_VERSION < 0x0600
+-                     and "libedit" not in readline.__doc__,
+-                     "not supported in this library version")
++    @unittest._skipInRpmBuild('readline 6.0 on EL6 is too old')
+     def test_init(self):
+         # Issue #19884: Ensure that the ANSI sequence "\033[1034h" is not
+         # written into stdout when the readline module is imported and stdout
