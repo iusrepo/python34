@@ -702,7 +702,8 @@ Patch189: 00189-add-rewheel-module.patch
 # Don't declare Werror=declaration-after-statement for extension
 # modules through setup.py
 # http://bugs.python.org/issue21121
-Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
+# FIXED UPSTREAM
+# Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
 
 # test.test_readline.TestReadline fails on el < 7
 # upstream does not this as regression so we will just skip this test
@@ -990,8 +991,7 @@ done
 
 # 00190: upstream as of Python 3.4.1
 # 00193: upstream as of Python 3.4.1
-#%patch195 -p1
-
+# 00195: upstream as of Python 3.4.2
 %if 0%{?rhel} < 7
 %patch196 -p1
 %endif
