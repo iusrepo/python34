@@ -946,7 +946,7 @@ done
 %endif
 # 00151: not for python3
 # 00152: upstream as of Python 3.3.0b2
-%patch153 -p0
+%patch153 -p1
 # 00154: not for this branch
 %patch155 -p1
 %patch156 -p1
