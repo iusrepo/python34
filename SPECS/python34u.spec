@@ -709,6 +709,12 @@ Patch189: 00189-add-rewheel-module.patch
 # upstream does not this as regression so we will just skip this test
 Patch196: 00196-disable_test_readline.TestReadline.patch
 
+# 00197
+#
+# New test introduced in 3.4.3 does not appear to work properly.  Skip for now,
+# re-evaluate later.
+Patch197: 00197-disable-test-in-test_threading.patch
+
 # (New patches go here ^^^)
 #
 # When adding new patches to "python" and "python3" in Fedora 17 onwards,
@@ -995,6 +1001,8 @@ done
 %if 0%{?rhel} < 7
 %patch196 -p1
 %endif
+
+%patch197 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1891,6 +1899,7 @@ rm -fr %{buildroot}
 - Refresh patch137, patch156
 - Refresh patch153 (partially merged upstream)
 - Refresh patch196 (upstream tried to fix but failed)
+- Add patch197
 
 * Wed Oct 08 2014 Ben Harper <ben.harper@rackspace.com> - 3.4.2-1.ius
 - update to lastest
