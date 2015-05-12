@@ -2,17 +2,19 @@
 # Conditionals and other variables controlling the build
 # ======================================================
 
-# NOTES ON BOOTSTRAPING PYTHON 3.4:
+# NOTES ON BOOTSTRAPPING PYTHON 3.4:
 #
 # Due to dependency cycle between Python, pip, setuptools and
 # wheel caused by the rewheel patch, one has to build in the
 # following order:
 #
-# 1) python34u with with_rewheel set to 0
-# 2) python34u-setuptools and python34u-pip with with_rewheel set to 0
-# 3) python34u-wheel
-# 4) python34u-setuptools and python34u-pip with with_rewheel set to 1
-# 5) python34u with with_rewheel set to 1
+# 1) python34u with_rewheel 0
+# 2) python34u-setuptools build_rewheel 0
+# 3) python34u-pip build_rewheel 0
+# 4) python34u-wheel
+# 5) python34u-setuptools build_rewheel 1
+# 6) python34u-pip build_rewheel 1
+# 7) python34u with_rewheel 1
 
 %global with_rewheel 1
 
