@@ -87,7 +87,11 @@
 %global with_computed_gotos yes
 
 # Turn this to 0 to turn off the "check" phase:
+%if 0%{?with_rewheel}
 %global run_selftest_suite 1
+%else
+%global run_selftest_suite 0
+%endif
 
 # We want to byte-compile the .py files within the packages using the new
 # python3 binary.
