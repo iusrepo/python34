@@ -475,7 +475,8 @@ Patch150: 00150-disable-rAssertAlmostEqual-cmath-on-ppc.patch
 # when running test_gdb.py; also cope with change to gdb in F17 onwards in
 # which values are printed as "v@entry" rather than just "v":
 # Not yet sent upstream
-Patch153: 00153-fix-test_gdb-noise.patch
+# Upstream as of 3.4.3
+#  Patch153: 00153-fix-test_gdb-noise.patch
 
 # 00154 #
 # python3.spec on f15 has:
@@ -491,8 +492,8 @@ Patch155: 00155-avoid-ctypes-thunks.patch
 # Recent builds of gdb will only auto-load scripts from certain safe
 # locations.  Turn off this protection when running test_gdb in the selftest
 # suite to ensure that it can load our -gdb.py script (rhbz#817072):
-# Not yet sent upstream
-Patch156: 00156-gdb-autoload-safepath.patch
+# Upsream as of 3.4.3
+#  Patch156: 00156-gdb-autoload-safepath.patch
 
 # 00157 #
 # Update uid/gid handling throughout the standard library: uid_t and gid_t are
@@ -958,10 +959,10 @@ done
 %endif
 # 00151: not for python3
 # 00152: upstream as of Python 3.3.0b2
-%patch153 -p1
+# 00153: upstream as of Python 3.4.3
 # 00154: not for this branch
 %patch155 -p1
-%patch156 -p1
+# 00156: upstream as of 3.4.3
 %patch157 -p1
 #00158: FIXME
 #00159: FIXME
