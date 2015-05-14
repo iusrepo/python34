@@ -159,8 +159,8 @@
 # Used later to check if our new wheels are the latest available.
 %global PIP_EXPECTED 6.1.1
 %global SETUPTOOLS_EXPECTED 15.2
-%global PIP_LATEST=%(curl -s https://pypi.python.org/pypi/pip/json | jq -r .info.version)
-%global SETUPTOOLS_LATEST=%(curl -s https://pypi.python.org/pypi/setuptools/json | jq -r .info.version)
+%global PIP_LATEST %(curl -s https://pypi.python.org/pypi/pip/json | jq -r .info.version)
+%global SETUPTOOLS_LATEST %(curl -s https://pypi.python.org/pypi/setuptools/json | jq -r .info.version)
 %endif
 
 
@@ -938,13 +938,13 @@ done
 
 %if 0%{?ensurepip_new_wheels}
 # Check if our new wheels are the latest available.
-if [[ %{PIP_LATEST} -ne %{PIP_EXPECTED} ]]; then
-    echo "There is a new wheel of `pip` available."
+if [[ %{PIP_LATEST} != %{PIP_EXPECTED} ]]; then
+    echo "There is a new wheel of pip available."
     echo "Download it and update Source9 and Patch198."
     exit 1
 fi
-if [[ %{SETUPTOOLS_LATEST} -ne %{SETUPTOOLS_EXPECTED} ]]; then
-    echo "There is a new wheel of `setuptools` available."
+if [[ %{SETUPTOOLS_LATEST} != %{SETUPTOOLS_EXPECTED} ]]; then
+    echo "There is a new wheel of setuptools available."
     echo "Download it and update Source10 and Patch198."
     exit 1
 fi
