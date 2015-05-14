@@ -1,0 +1,15 @@
+diff -Naurp a/Lib/ensurepip/__init__.py b/Lib/ensurepip/__init__.py
+--- a/Lib/ensurepip/__init__.py	2015-02-25 05:27:44.000000000 -0600
++++ b/Lib/ensurepip/__init__.py	2015-05-14 11:07:09.588219133 -0500
+@@ -8,9 +8,9 @@ import tempfile
+ __all__ = ["version", "bootstrap"]
+ 
+ 
+-_SETUPTOOLS_VERSION = "12.0.5"
++_SETUPTOOLS_VERSION = "15.2"
+ 
+-_PIP_VERSION = "6.0.8"
++_PIP_VERSION = "6.1.1"
+ 
+ # pip currently requires ssl support, so we try to provide a nicer
+ # error message when that is missing (http://bugs.python.org/issue19744)

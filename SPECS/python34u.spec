@@ -18,6 +18,12 @@
 
 %global with_rewheel 1
 
+# The ensurepip module comes with bundled wheels for pip and setuptools.  If
+# these are out of date, it may cause the test suite to fail.  Setting this 1
+# will use Source9 and Source10 instead of the original ones bundled with
+# ensurepip.
+%global ensurepip_new_wheels 0
+
 %global pybasever 3.4
 
 # pybasever without the dot:
@@ -149,6 +155,14 @@
 # the rest of the build
 %global regenerate_autotooling_patch 0
 
+%if 0%{?ensurepip_new_wheels}
+# Used later to check if our new wheels are the latest available.
+%global PIP_EXPECTED 6.1.1
+%global SETUPTOOLS_EXPECTED 15.2
+%global PIP_LATEST=%(curl -s https://pypi.python.org/pypi/pip/json | jq -r .info.version)
+%global SETUPTOOLS_LATEST=%(curl -s https://pypi.python.org/pypi/setuptools/json | jq -r .info.version)
+%endif
+
 
 # ==================
 # Top-level metadata
@@ -233,6 +247,12 @@ BuildRequires: python%{iusver}-setuptools
 BuildRequires: python%{iusver}-pip
 %endif
 
+%if 0%{?ensurepip_new_wheels}
+# Used to check for the latest version of pip and setuptools from pypi.
+BuildRequires: curl
+BuildRequires: jq
+%endif
+
 
 # =======================
 # Source code and patches
@@ -272,6 +292,10 @@ Source7: pyfuntop.stp
 # Run in check section with Python that is currently being built
 # Written by bkabrda
 Source8: check-pyc-and-pyo-timestamps.py
+
+# New wheels of pip and setuptools for use with ensurepip_new_wheels option.
+Source9: https://pypi.python.org/packages/py2.py3/p/pip/pip-6.1.1-py2.py3-none-any.whl
+Source10: https://pypi.python.org/packages/3.4/s/setuptools/setuptools-15.2-py2.py3-none-any.whl
 
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
 # Was Patch0 in ivazquez' python3000 specfile:
@@ -722,6 +746,11 @@ Patch196: 00196-disable_test_readline.TestReadline.patch
 # re-evaluate later.
 Patch197: 00197-disable-test-in-test_threading.patch
 
+# 00198
+#
+# Update ensurepip's __init__.py file to reflect the new wheels.
+Patch198: 00198-ensurepip-new-wheels.patch
+
 # (New patches go here ^^^)
 #
 # When adding new patches to "python" and "python3" in Fedora 17 onwards,
@@ -907,6 +936,25 @@ for f in md5module.c sha1module.c sha256module.c sha512module.c; do
     rm Modules/$f
 done
 
+%if 0%{?ensurepip_new_wheels}
+# Check if our new wheels are the latest available.
+if [[ %{PIP_LATEST} -ne %{PIP_EXPECTED} ]]; then
+    echo "There is a new wheel of `pip` available."
+    echo "Download it and update Source9 and Patch198."
+    exit 1
+fi
+if [[ %{SETUPTOOLS_LATEST} -ne %{SETUPTOOLS_EXPECTED} ]]; then
+    echo "There is a new wheel of `setuptools` available."
+    echo "Download it and update Source10 and Patch198."
+    exit 1
+fi
+# Remove the original bundled wheels and replace with current ones.
+rm Lib/ensurepip/_bundled/pip-*.whl
+rm Lib/ensurepip/_bundled/setuptools-*.whl
+cp -a %{SOURCE9} Lib/ensurepip/_bundled/
+cp -a %{SOURCE10} Lib/ensurepip/_bundled/
+%endif
+
 #
 # Apply patches:
 #
@@ -1010,6 +1058,11 @@ done
 %endif
 
 %patch197 -p1
+
+%if 0%{?ensurepip_new_wheels}
+# Update ensurepip's __init__.py file to reflect the new wheels.
+%patch198 -p1
+%endif
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
