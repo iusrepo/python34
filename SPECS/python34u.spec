@@ -18,6 +18,18 @@
 
 %global with_rewheel 1
 
+# The ensurepip module comes with bundled wheels for pip and setuptools.  If
+# these don't match the ones installed in the build environment, it may cause
+# the test suite to fail.  Enabling this will replace the original bundled
+# wheels with Source9 and Source10.
+%global ensurepip_match_wheels 1
+
+%if 0%{?ensurepip_match_wheels}
+# Set these macros to match the currently available RPMs.
+%global setuptools_ver 15.2
+%global pip_ver 6.1.1
+%endif
+
 %global pybasever 3.4
 
 # pybasever without the dot:
@@ -229,9 +241,14 @@ BuildRequires: xz-devel
 BuildRequires: zlib-devel
 
 %if 0%{?with_rewheel}
+%if 0%{?ensurepip_match_wheels}
+BuildRequires: python%{iusver}-setuptools == %{setuptools_ver}
+BuildRequires: python%{iusver}-pip == %{pip_ver}
+%else
 BuildRequires: python%{iusver}-setuptools
 BuildRequires: python%{iusver}-pip
-%endif
+%endif # ensurepip_match_wheels
+%endif # with_rewheel
 
 
 # =======================
@@ -272,6 +289,10 @@ Source7: pyfuntop.stp
 # Run in check section with Python that is currently being built
 # Written by bkabrda
 Source8: check-pyc-and-pyo-timestamps.py
+
+# New wheels of setuptools and pip for use with ensurepip_match_wheels option.
+Source9: https://pypi.python.org/packages/%{pybasever}/s/setuptools/setuptools-%{setuptools_ver}-py2.py3-none-any.whl
+Source10: https://pypi.python.org/packages/py2.py3/p/pip/pip-%{pip_ver}-py2.py3-none-any.whl
 
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
 # Was Patch0 in ivazquez' python3000 specfile:
@@ -906,6 +927,17 @@ rm -r Modules/zlib || exit 1
 for f in md5module.c sha1module.c sha256module.c sha512module.c; do
     rm Modules/$f
 done
+
+%if 0%{?ensurepip_match_wheels}
+# setuptools
+sed -i '/^_SETUPTOOLS_VERSION = / s/".*"/"%{setuptools_ver}"/' Lib/ensurepip/__init__.py
+rm Lib/ensurepip/_bundled/setuptools-*.whl
+cp -a %{SOURCE9} Lib/ensurepip/_bundled/
+# pip
+sed -i '/^_PIP_VERSION = / s/".*"/"%{pip_ver}"/' Lib/ensurepip/__init__.py
+rm Lib/ensurepip/_bundled/pip-*.whl
+cp -a %{SOURCE10} Lib/ensurepip/_bundled/
+%endif # ensurepip_match_wheels
 
 #
 # Apply patches:
