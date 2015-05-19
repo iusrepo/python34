@@ -25,6 +25,12 @@
 
 %global iusver %{pyshortver}u
 
+%if 0%{?rhel} >= 7
+%global _brpdir /usr/lib/rpm
+%else
+%global _brpdir /usr/lib/rpm/redhat
+%endif
+
 %global pylibdir %{_libdir}/python%{pybasever}
 %global dynload_dir %{pylibdir}/lib-dynload
 
@@ -104,19 +110,11 @@
 # (/usr/bin/python, rather than the freshly built python), thus leading to
 # numerous syntax errors, and incorrect magic numbers in the .pyc files.  We
 # thus override __os_install_post to avoid invoking this script:
-%if 0%{?rhel} < 7
-%global __os_install_post /usr/lib/rpm/redhat/brp-compress \
-  %{!?__debug_package:/usr/lib/rpm/redhat/brp-strip %{__strip}} \
-  /usr/lib/rpm/redhat/brp-strip-static-archive %{__strip} \
-  /usr/lib/rpm/redhat/brp-strip-comment-note %{__strip} %{__objdump} \
-  /usr/lib/rpm/redhat/brp-python-hardlink
-%else
-%global __os_install_post /usr/lib/rpm/brp-compress \
-  %{!?__debug_package:/usr/lib/rpm/brp-strip %{__strip}} \
-  /usr/lib/rpm/brp-strip-static-archive %{__strip} \
-  /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump} \
-  /usr/lib/rpm/brp-python-hardlink
-%endif
+%global __os_install_post %{_brpdir}/brp-compress \
+  %{!?__debug_package:%{_brpdir}/brp-strip %{__strip}} \
+  %{_brpdir}/brp-strip-static-archive %{__strip} \
+  %{_brpdir}/brp-strip-comment-note %{__strip} %{__objdump} \
+  %{_brpdir}/brp-python-hardlink
 # to remove the invocation of brp-python-bytecompile, whilst keeping the
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
