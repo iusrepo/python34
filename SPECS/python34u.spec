@@ -27,8 +27,10 @@
 
 %if 0%{?rhel} >= 7
 %global _brpdir /usr/lib/rpm
+%global _macrosdir %{_rpmconfigdir}/macros.d
 %else
 %global _brpdir /usr/lib/rpm/redhat
+%global _macrosdir %{_sysconfdir}/rpm
 %endif
 
 %global pylibdir %{_libdir}/python%{pybasever}
@@ -246,12 +248,12 @@ Source1: find-provides-without-python-sonames.sh
 
 # Supply various useful macros for building python 3 modules:
 #  __python3, python3_sitelib, python3_sitearch
-Source2: macros.python3
+Source2: macros.python%{pybasever}
 
 # Supply an RPM macro "py_byte_compile" for the python3-devel subpackage
 # to enable specfiles to selectively byte-compile individual files and paths
 # with different Python runtimes as necessary:
-Source3: macros.pybytecompile
+Source3: macros.pybytecompile%{pybasever}
 
 # Systemtap tapset to make it easier to use the systemtap static probes
 # (actually a template; LIBRARY_PATH will get fixed up during install)
@@ -1352,15 +1354,8 @@ find %{buildroot} \
     -perm 555 -exec chmod 755 {} \;
 
 # Install macros for rpm:
-%if 0%{?rhel} < 7
-mkdir -p %{buildroot}/%{_sysconfdir}/rpm
-install -m 644 %{SOURCE2} %{buildroot}/%{_sysconfdir}/rpm
-install -m 644 %{SOURCE3} %{buildroot}/%{_sysconfdir}/rpm
-%else
-mkdir -p %{buildroot}/%{_rpmconfigdir}/macros.d/
-install -m 644 %{SOURCE2} %{buildroot}/%{_rpmconfigdir}/macros.d/
-install -m 644 %{SOURCE3} %{buildroot}/%{_rpmconfigdir}/macros.d/
-%endif
+install -Dm0644 %{SOURCE2} %{buildroot}%{_macrosdir}/macros.python%{pybasever}
+install -Dm0644 %{SOURCE3} %{buildroot}%{_macrosdir}/macros.pybytecompile%{pybasever}
 
 # Ensure that the curses module was linked against libncursesw.so, rather than
 # libncurses.so (bug 539917)
@@ -1732,13 +1727,8 @@ rm -fr %{buildroot}
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
 %{_libdir}/pkgconfig/python3.pc
-%if 0%{?rhel} < 7
-%{_sysconfdir}/rpm/macros.python3
-%{_sysconfdir}/rpm/macros.pybytecompile
-%else
-%{_rpmconfigdir}/macros.d/macros.python3
-%{_rpmconfigdir}/macros.d/macros.pybytecompile
-%endif
+%{_macrosdir}/macros.python%{pybasever}
+%{_macrosdir}/macros.pybytecompile%{pybasever}
 
 %files tools
 %defattr(-,root,root,755)
