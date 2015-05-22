@@ -704,6 +704,12 @@ Patch189: 00189-add-rewheel-module.patch
 # FIXED UPSTREAM
 # Patch193: 00193-skip-correct-num-of-pycfile-bytes-in-modulefinder.patch
 
+# 00194
+#
+# Tests requiring SIGHUP to work don't work in Koji
+# see rhbz#1088233
+Patch194: temporarily-disable-tests-requiring-SIGHUP.patch
+
 # 00195
 #
 # Don't declare Werror=declaration-after-statement for extension
@@ -712,12 +718,11 @@ Patch189: 00189-add-rewheel-module.patch
 # FIXED UPSTREAM
 # Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
 
-
-# 00197
+# 00203
 #
-# New test introduced in 3.4.3 does not appear to work properly.  Skip for now,
-# re-evaluate later.
-Patch197: 00197-disable-test-in-test_threading.patch
+# test_threading fails in koji dues to it's handling of signals
+Patch203: 00203-disable-threading-test-koji.patch
+
 
 # (New patches go here ^^^)
 #
@@ -1001,8 +1006,9 @@ done
 
 # 00190: upstream as of Python 3.4.1
 # 00193: upstream as of Python 3.4.1
+%patch194 -p1
 # 00195: upstream as of Python 3.4.2
-%patch197 -p1
+%patch203 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
