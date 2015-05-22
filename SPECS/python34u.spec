@@ -712,9 +712,6 @@ Patch189: 00189-add-rewheel-module.patch
 # FIXED UPSTREAM
 # Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
 
-# test.test_readline.TestReadline fails on el < 7
-# upstream does not this as regression so we will just skip this test
-Patch196: 00196-disable_test_readline.TestReadline.patch
 
 # 00197
 #
@@ -1005,10 +1002,6 @@ done
 # 00190: upstream as of Python 3.4.1
 # 00193: upstream as of Python 3.4.1
 # 00195: upstream as of Python 3.4.2
-%if 0%{?rhel} < 7
-%patch196 -p1
-%endif
-
 %patch197 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
@@ -1456,8 +1449,15 @@ CheckPython() {
   # our non-standard decorators take effect on the relevant tests:
   #   @unittest._skipInRpmBuild(reason)
   #   @unittest._expectedFailureInRpmBuild
+  #
+  # test_readline.TestReadline fails on el < 7
+  # http://bugs.python.org/issue19884
+  # http://bugs.python.org/issue22773
   WITHIN_PYTHON_RPM_BUILD= \
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
+    %if 0%{?rhel} < 7
+    -x test_readline \
+    %endif
     --verbose --findleaks
 
   echo FINISHED: CHECKING OF PYTHON FOR CONFIGURATION: $ConfName
