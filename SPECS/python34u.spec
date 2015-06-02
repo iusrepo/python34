@@ -156,7 +156,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.3
-Release: 1.ius%{?dist}
+Release: 2.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1904,6 +1904,13 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
+- Remove patch153 and patch156
+- Skip test_readline with regrtest flag instead of with a patch
+- Skip test_distutils and test_venv when using rewheel
+- Switch to Fedora patches for skipping SIGHUP and threading tests
+- Use same build flags as Fedora
+
 * Wed Feb 25 2015 Carl George <carl.george@rackspace.com> - 3.4.3-1.ius
 - Latest upstream
 - Refresh patch137, patch156
