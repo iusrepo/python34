@@ -1640,7 +1640,9 @@ rm -fr %{buildroot}
 %dir %{pylibdir}/ensurepip/__pycache__/
 %{pylibdir}/ensurepip/*.py
 %{pylibdir}/ensurepip/__pycache__/*%{bytecode_suffixes}
+%if 0%{?with_rewheel}
 %exclude %{pylibdir}/ensurepip/_bundled
+%endif
 
 %if 0%{?with_rewheel}
 %dir %{pylibdir}/ensurepip/rewheel/
