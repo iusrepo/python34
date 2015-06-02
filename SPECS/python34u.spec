@@ -1071,6 +1071,7 @@ BuildPython() {
   SymlinkName=$3
   ExtraConfigArgs=$4
   PathFixWithThisBinary=$5
+  MoreCFlags=$6
 
   ConfDir=build/$ConfName
 
@@ -1108,8 +1109,7 @@ BuildPython() {
   #    missing symbol AnnotateRWLockDestroy
   #
   # Invoke the build:
-  # TODO: it seems that 3.4.0a4 fails with %{?_smp_flags}, have to figure out why
-  make EXTRA_CFLAGS="$CFLAGS"
+  make EXTRA_CFLAGS="$CFLAGS $MoreCFlags" %{?_smp_mflags}
 
   popd
   echo FINISHED: BUILD OF PYTHON FOR CONFIGURATION: $ConfDir
@@ -1126,7 +1126,8 @@ BuildPython debug \
 %else
   "--with-pydebug --with-count-allocs --with-call-profile --without-ensurepip" \
 %endif
-  false
+  false \
+  -O1
 %endif # with_debug_build
 
 BuildPython optimized \
@@ -1148,6 +1149,7 @@ InstallPython() {
 
   ConfName=$1	      
   PyInstSoName=$2
+  MoreCFlags=$3
 
   ConfDir=build/$ConfName
 
@@ -1156,7 +1158,7 @@ InstallPython() {
 
   pushd $ConfDir
 
-make install DESTDIR=%{buildroot} INSTALL="install -p"
+make install DESTDIR=%{buildroot} INSTALL="install -p" EXTRA_CFLAGS="$MoreCFlags"
 
   popd
 
@@ -1199,7 +1201,8 @@ make install DESTDIR=%{buildroot} INSTALL="install -p"
 # Install the "debug" build first, so that we can move some files aside
 %if 0%{?with_debug_build}
 InstallPython debug \
-  %{py_INSTSONAME_debug}
+  %{py_INSTSONAME_debug} \
+  -O1
 %endif # with_debug_build
 
 # Now the optimized build:
