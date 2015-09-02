@@ -492,7 +492,7 @@ Patch155: 00155-avoid-ctypes-thunks.patch
 # Recent builds of gdb will only auto-load scripts from certain safe
 # locations.  Turn off this protection when running test_gdb in the selftest
 # suite to ensure that it can load our -gdb.py script (rhbz#817072):
-# Upsream as of 3.4.3
+# Upstream as of 3.4.3
 #  Patch156: 00156-gdb-autoload-safepath.patch
 
 # 00157 #
