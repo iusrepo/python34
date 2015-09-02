@@ -728,6 +728,11 @@ Patch202: 00202-fix-undefined-behaviour-in-faulthandler.patch
 # test_threading fails in koji dues to it's handling of signals
 Patch203: 00203-disable-threading-test-koji.patch
 
+# 00204
+#
+# openssl requires DH keys to be > 768bits
+Patch204: 00204-increase-dh-keys-size.patch
+
 
 # (New patches go here ^^^)
 #
@@ -1015,6 +1020,7 @@ done
 # 00195: upstream as of Python 3.4.2
 %patch202 -p1
 %patch203 -p1
+%patch204 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1913,6 +1919,7 @@ rm -fr %{buildroot}
 
 %changelog
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
+- Add Fedora patch204 to use 1024bit DH key in test_ssl
 
 * Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
 - Remove patch153 and patch156
