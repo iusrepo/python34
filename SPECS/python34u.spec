@@ -1139,7 +1139,7 @@ BuildPython debug \
   "--with-pydebug --with-count-allocs --with-call-profile --without-ensurepip" \
 %endif
   false \
-  -O1
+  -O0
 %endif # with_debug_build
 
 BuildPython optimized \
@@ -1214,7 +1214,7 @@ make install DESTDIR=%{buildroot} INSTALL="install -p" EXTRA_CFLAGS="$MoreCFlags
 %if 0%{?with_debug_build}
 InstallPython debug \
   %{py_INSTSONAME_debug} \
-  -O1
+  -O0
 %endif # with_debug_build
 
 # Now the optimized build:
@@ -1920,6 +1920,7 @@ rm -fr %{buildroot}
 %changelog
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
 - Add Fedora patch204 to use 1024bit DH key in test_ssl
+- Add Fedora change to use -O0 when compiling -debug build
 
 * Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
 - Remove patch153 and patch156
