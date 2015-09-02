@@ -813,7 +813,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Conflicts: %{name} < %{version}-%{release}
 
 %description devel
-This package contains libraries and header files used to build applications 
+This package contains libraries and header files used to build applications
 with and native libraries for Python 3
 
 %package tools
