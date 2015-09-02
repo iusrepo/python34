@@ -1244,7 +1244,7 @@ cp -ar Tools/demo %{buildroot}%{pylibdir}/Tools/
 rm -f %{buildroot}%{pylibdir}/email/test/data/audiotest.au %{buildroot}%{pylibdir}/test/audiotest.au
 
 %if "%{_lib}" == "lib64"
-install -d -m 0755 %{buildroot}/usr/lib/python%{pybasever}/site-packages/__pycache__
+install -d -m 0755 %{buildroot}/%{_prefix}/lib/python%{pybasever}/site-packages/__pycache__
 %endif
 
 # Make python3-devel multilib-ready (bug #192747, #139911)
@@ -1921,6 +1921,7 @@ rm -fr %{buildroot}
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
 - Add Fedora patch204 to use 1024bit DH key in test_ssl
 - Add Fedora change to use -O0 when compiling -debug build
+- Add Fedora change to allow relocating Python via _prefix rhbz#1231801
 
 * Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
 - Remove patch153 and patch156
