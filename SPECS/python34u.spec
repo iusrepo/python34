@@ -1642,6 +1642,8 @@ rm -fr %{buildroot}
 %{pylibdir}/ensurepip/__pycache__/*%{bytecode_suffixes}
 %if 0%{?with_rewheel}
 %exclude %{pylibdir}/ensurepip/_bundled
+%else
+%{pylibdir}/ensurepip/_bundled
 %endif
 
 %if 0%{?with_rewheel}
