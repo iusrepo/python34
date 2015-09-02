@@ -718,6 +718,11 @@ Patch194: temporarily-disable-tests-requiring-SIGHUP.patch
 # FIXED UPSTREAM
 # Patch195: 00195-dont-add-Werror-declaration-after-statement.patch
 
+# 00202 #
+# Fixes undefined behaviour in faulthandler which caused test to hang on x86_64
+# http://bugs.python.org/issue23433
+Patch202: 00202-fix-undefined-behaviour-in-faulthandler.patch
+
 # 00203
 #
 # test_threading fails in koji dues to it's handling of signals
@@ -1008,6 +1013,7 @@ done
 # 00193: upstream as of Python 3.4.1
 %patch194 -p1
 # 00195: upstream as of Python 3.4.2
+%patch202 -p1
 %patch203 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
@@ -1906,6 +1912,8 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+- Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
+
 * Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
 - Remove patch153 and patch156
 - Skip test_readline with regrtest flag instead of with a patch
