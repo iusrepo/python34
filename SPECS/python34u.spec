@@ -1480,10 +1480,8 @@ CheckPython() {
   WITHIN_PYTHON_RPM_BUILD= \
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
     --verbose --findleaks \
-    %if 0%{?with_rewheel}
     -x test_distutils \
     -x test_venv \
-    %endif
     %if 0%{?rhel} < 7
     -x test_readline
     %endif
