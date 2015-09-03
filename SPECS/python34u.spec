@@ -474,7 +474,6 @@ Patch150: 00150-disable-rAssertAlmostEqual-cmath-on-ppc.patch
 # Strip out lines of the form "warning: Unable to open ..." from gdb's stderr
 # when running test_gdb.py; also cope with change to gdb in F17 onwards in
 # which values are printed as "v@entry" rather than just "v":
-# Not yet sent upstream
 # Upstream as of 3.4.3
 #  Patch153: 00153-fix-test_gdb-noise.patch
 
