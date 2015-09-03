@@ -1399,6 +1399,10 @@ done
 %if 0%{?with_debug_build}
 ln -s \
   %{_bindir}/python%{LDVERSION_debug} \
+  %{buildroot}%{_bindir}/python%{pybasever}-debug
+
+ln -s \
+  %{_bindir}/python%{pybasever}-debug \
   %{buildroot}%{_bindir}/python3-debug
 %endif
 
@@ -1428,7 +1432,7 @@ sed \
 # working with debug build
 sed \
    -e "s|LIBRARY_PATH|%{_libdir}/%{py_INSTSONAME_debug}|" \
-   -e 's|"python3"|"python3-debug"|' \
+   -e 's|"python3"|"python%{pybasever}-debug"|' \
    %{_sourcedir}/libpython.stp \
    > %{buildroot}%{tapsetdir}/%{libpython_stp_debug}
 %endif # with_debug_build
@@ -1808,6 +1812,7 @@ rm -fr %{buildroot}
 # Analog of the core subpackage's files:
 %{_bindir}/python%{LDVERSION_debug}
 %{_bindir}/python3-debug
+%{_bindir}/python%{pybasever}-debug
 
 # Analog of the -libs subpackage's files:
 # ...with debug builds of the built-in "extension" modules:
@@ -1922,6 +1927,7 @@ rm -fr %{buildroot}
 - Add Fedora patch204 to use 1024bit DH key in test_ssl
 - Add Fedora change to use -O0 when compiling -debug build
 - Add Fedora change to allow relocating Python via _prefix rhbz#1231801
+- Add EPEL change to create symlink for python3.4-debug
 
 * Fri May 22 2015 Carl George <carl.george@rackspace.com> - 3.4.3-2.ius
 - Remove patch153 and patch156
