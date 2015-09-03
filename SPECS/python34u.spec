@@ -156,7 +156,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.3
-Release: 2.ius%{?dist}
+Release: 3.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1923,6 +1923,7 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Wed Sep 02 2015 Carl George <carl.george@rackspace.com> - 3.4.3-3.ius
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
 - Add Fedora patch204 to use 1024bit DH key in test_ssl
 - Add Fedora change to use -O0 when compiling -debug build
