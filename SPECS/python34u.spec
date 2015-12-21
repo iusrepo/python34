@@ -155,8 +155,8 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
-Version: %{pybasever}.3
-Release: 3.ius%{?dist}
+Version: %{pybasever}.4
+Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -720,7 +720,8 @@ Patch194: temporarily-disable-tests-requiring-SIGHUP.patch
 # 00202 #
 # Fixes undefined behaviour in faulthandler which caused test to hang on x86_64
 # http://bugs.python.org/issue23433
-Patch202: 00202-fix-undefined-behaviour-in-faulthandler.patch
+# FIXED UPSTREAM
+# Patch202: 00202-fix-undefined-behaviour-in-faulthandler.patch
 
 # 00203
 #
@@ -730,7 +731,8 @@ Patch203: 00203-disable-threading-test-koji.patch
 # 00204
 #
 # openssl requires DH keys to be > 768bits
-Patch204: 00204-increase-dh-keys-size.patch
+# FIXED UPSTREAM
+# Patch204: 00204-increase-dh-keys-size.patch
 
 
 # (New patches go here ^^^)
@@ -1017,9 +1019,9 @@ done
 # 00193: upstream as of Python 3.4.1
 %patch194 -p1
 # 00195: upstream as of Python 3.4.2
-%patch202 -p1
+# 00202: upstream as of Python 3.4.4
 %patch203 -p1
-%patch204 -p1
+# 00204: upstream as of Python 3.4.4
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1920,6 +1922,10 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
+- Latest upstream
+- Dropped patches (merged upstream): 202, 204
+
 * Wed Sep 02 2015 Carl George <carl.george@rackspace.com> - 3.4.3-3.ius
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
 - Add Fedora patch204 to use 1024bit DH key in test_ssl
