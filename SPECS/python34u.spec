@@ -295,6 +295,9 @@ Patch102: 00102-lib64.patch
 # Another lib64 fix, for distutils/tests/test_install.py; not upstream:
 Patch104: 00104-lib64-fix-for-test_install.patch
 
+# revert change to insure that Patch102 works correctly
+Patch105: 00105-LIBPL-fix.patch
+
 # 00111 #
 # Patch the Makefile.pre.in so that the generated Makefile doesn't try to build
 # a libpythonMAJOR.MINOR.a (bug 550692):
@@ -933,6 +936,7 @@ done
 %if "%{_lib}" == "lib64"
 %patch102 -p1
 %patch104 -p1
+%patch105 -p1
 %endif
 
 
@@ -1925,6 +1929,7 @@ rm -fr %{buildroot}
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
 - Dropped patches (merged upstream): 202, 204
+- Add patch105
 
 * Wed Sep 02 2015 Carl George <carl.george@rackspace.com> - 3.4.3-3.ius
 - Add Fedora patch202 to fix undefined behaviour in faulthandler http://bugs.python.org/issue23433
