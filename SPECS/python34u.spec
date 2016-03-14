@@ -100,6 +100,16 @@
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
 
+# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  This
+# symbol is used in pyexpat in order to mitigate CVE-2012-0876.  That symbol
+# was backported to el5/el6: https://rhn.redhat.com/errata/RHSA-2012-0731.html
+# However, el5's expat is missing other symbols that cause the build to fail.
+# We'll use the bundled expat on el5, and stock expat on el6.
+%if 0%{?rhel} >= 6
+%global with_system_expat 1
+%else
+%global with_system_expat 0
+%endif
 
 # We need to get a newer configure generated out of configure.in for the following
 # patches:
@@ -156,19 +166,9 @@ BuildRequires: bzip2
 BuildRequires: bzip2-devel
 BuildRequires: db4-devel >= 4.7
 
-# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  Fedora
-# requires this version to account for CVE-2012-0876.  However, that symbol was
-# backported when the CVE was patched in el6, so I don't believe we need it for
-# IUS.
-#
-# $ rpm -qf /lib64/libexpat.so.1
-# expat-2.0.1-11.el6_2.x86_64
-# $ strings /lib64/libexpat.so.1 | grep XML_SetHash
-# XML_SetHashSalt
-#
-# https://rhn.redhat.com/errata/RHSA-2012-0731.html#Red Hat Enterprise Linux Server (v. 6)
-# https://bugzilla.redhat.com/show_bug.cgi?id=821337
+%if 0%{?with_system_expat}
 BuildRequires: expat-devel
+%endif
 
 BuildRequires: findutils
 BuildRequires: gcc-c++
@@ -540,19 +540,9 @@ Summary:        Python 3 runtime libraries
 Group:          Development/Libraries
 #Requires:       %{name} = %{version}-%{release}
 
-# expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  Fedora
-# requires this version to account for CVE-2012-0876.  However, that symbol was
-# backported when the CVE was patched in el6, so I don't believe we need it for
-# IUS.
-#
-# $ rpm -qf /lib64/libexpat.so.1
-# expat-2.0.1-11.el6_2.x86_64
-# $ strings /lib64/libexpat.so.1 | grep XML_SetHash
-# XML_SetHashSalt
-#
-# https://rhn.redhat.com/errata/RHSA-2012-0731.html#Red Hat Enterprise Linux Server (v. 6)
-# https://bugzilla.redhat.com/show_bug.cgi?id=821337
+%if 0%{?with_system_expat}
 Requires: expat
+%endif
 
 %description libs
 This package contains files used to embed Python 3 into applications.
@@ -650,7 +640,9 @@ cp -a %{SOURCE7} .
 # Ensure that we're using the system copy of various libraries, rather than
 # copies shipped by upstream in the tarball:
 #   Remove embedded copy of expat:
+%if 0%{?with_system_expat}
 rm -r Modules/expat || exit 1
+%endif
 
 #   Remove embedded copy of libffi:
 for SUBDIR in darwin libffi libffi_arm_wince libffi_msvc libffi_osx ; do
@@ -803,7 +795,9 @@ BuildPython() {
   --enable-shared \
   --with-computed-gotos=%{with_computed_gotos} \
   --with-dbmliborder=gdbm:ndbm:bdb \
+%if 0%{?with_system_expat}
   --with-system-expat \
+%endif
   --with-system-ffi \
   --enable-loadable-sqlite-extensions \
 %if 0%{?with_systemtap}
@@ -1606,6 +1600,7 @@ rm -fr %{buildroot}
 %changelog
 * Mon Mar 14 2016 Carl George <carl.george@rackspace.com> - 3.4.4-2.ius
 - Disable and remove rewheel
+- Optionally build against bundled expat
 
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
