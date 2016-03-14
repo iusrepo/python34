@@ -1422,6 +1422,8 @@ rm -fr %{buildroot}
 %{_libdir}/libpython3.so
 %{_libdir}/libpython%{LDVERSION_optimized}.so
 %if 0%{?with_systemtap}
+%dir %(dirname %{tapsetdir})
+%dir %{tapsetdir}
 %{tapsetdir}/%{libpython_stp_optimized}
 %doc systemtap-example.stp pyfuntop.stp
 %endif
@@ -1554,6 +1556,8 @@ rm -fr %{buildroot}
 
 %{_libdir}/%{py_INSTSONAME_debug}
 %if 0%{?with_systemtap}
+%dir %(dirname %{tapsetdir})
+%dir %{tapsetdir}
 %{tapsetdir}/%{libpython_stp_debug}
 %endif
 
@@ -1603,6 +1607,7 @@ rm -fr %{buildroot}
 - Optionally build against bundled expat
 - Rename python3-2to3 to 2to3-3
 - Move libpython3.4m.so from -devel to -libs
+- Own systemtap dirs
 
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
