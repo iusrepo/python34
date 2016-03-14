@@ -920,7 +920,7 @@ InstallPython optimized \
 
 install -d -m 0755 ${RPM_BUILD_ROOT}%{pylibdir}/site-packages/__pycache__
 
-mv ${RPM_BUILD_ROOT}%{_bindir}/2to3 ${RPM_BUILD_ROOT}%{_bindir}/python3-2to3
+mv ${RPM_BUILD_ROOT}%{_bindir}/2to3 ${RPM_BUILD_ROOT}%{_bindir}/2to3-3
 
 # Development tools
 install -m755 -d ${RPM_BUILD_ROOT}%{pylibdir}/Tools
@@ -1443,7 +1443,7 @@ rm -fr %{buildroot}
 %{_macrosdir}/macros.pybytecompile%{pybasever}
 
 %files tools
-%{_bindir}/python3-2to3
+%{_bindir}/2to3-3
 %{_bindir}/2to3-%{pybasever}
 %{_bindir}/idle*
 %{pylibdir}/Tools
@@ -1601,6 +1601,7 @@ rm -fr %{buildroot}
 * Mon Mar 14 2016 Carl George <carl.george@rackspace.com> - 3.4.4-2.ius
 - Disable and remove rewheel
 - Optionally build against bundled expat
+- Rename python3-2to3 to 2to3-3
 
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
