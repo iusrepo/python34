@@ -1186,7 +1186,7 @@ CheckPython() {
 
 }
 
-%if 0%{run_selftest_suite}
+%if 0%{?run_selftest_suite}
 
 # Check each of the configurations:
 %if 0%{?with_debug_build}
