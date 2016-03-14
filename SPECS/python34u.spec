@@ -1420,6 +1420,7 @@ rm -fr %{buildroot}
 
 %{_libdir}/%{py_INSTSONAME_optimized}
 %{_libdir}/libpython3.so
+%{_libdir}/libpython%{LDVERSION_optimized}.so
 %if 0%{?with_systemtap}
 %{tapsetdir}/%{libpython_stp_optimized}
 %doc systemtap-example.stp pyfuntop.stp
@@ -1435,7 +1436,6 @@ rm -fr %{buildroot}
 %{_bindir}/python%{pybasever}-config
 %{_bindir}/python%{LDVERSION_optimized}-config
 %{_bindir}/python%{LDVERSION_optimized}-*-config
-%{_libdir}/libpython%{LDVERSION_optimized}.so
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
 %{_libdir}/pkgconfig/python3.pc
@@ -1602,6 +1602,7 @@ rm -fr %{buildroot}
 - Disable and remove rewheel
 - Optionally build against bundled expat
 - Rename python3-2to3 to 2to3-3
+- Move libpython3.4m.so from -devel to -libs
 
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
