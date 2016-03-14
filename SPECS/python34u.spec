@@ -2,22 +2,6 @@
 # Conditionals and other variables controlling the build
 # ======================================================
 
-# NOTES ON BOOTSTRAPPING PYTHON 3.4:
-#
-# Due to dependency cycle between Python, pip, setuptools and
-# wheel caused by the rewheel patch, one has to build in the
-# following order:
-#
-# 1) python34u with_rewheel 0
-# 2) python34u-setuptools build_rewheel 0
-# 3) python34u-pip build_rewheel 0
-# 4) python34u-wheel
-# 5) python34u-setuptools build_rewheel 1
-# 6) python34u-pip build_rewheel 1
-# 7) python34u with_rewheel 1
-
-%global with_rewheel 1
-
 %global pybasever 3.4
 
 # pybasever without the dot:
@@ -94,12 +78,7 @@
 # Change from yes to no to turn this off
 %global with_computed_gotos yes
 
-# Turn this to 0 to turn off the "check" phase:
-%if 0%{?with_rewheel}
 %global run_selftest_suite 1
-%else
-%global run_selftest_suite 0
-%endif
 
 # We want to byte-compile the .py files within the packages using the new
 # python3 binary.
@@ -156,7 +135,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{iusver}
 Version: %{pybasever}.4
-Release: 1.ius%{?dist}
+Release: 2.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -227,12 +206,6 @@ BuildRequires: valgrind-devel
 
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
-
-%if 0%{?with_rewheel}
-BuildRequires: python%{iusver}-setuptools
-BuildRequires: python%{iusver}-pip
-%endif
-
 
 # =======================
 # Source code and patches
@@ -508,14 +481,6 @@ Patch186: 00186-dont-raise-from-py_compile.patch
 #   relying on this will fail (test_filename_changing_on_output_single_dir)
 Patch188: 00188-fix-lib2to3-tests-when-hashlib-doesnt-compile-properly.patch
 
-# 00189 #
-# Add the rewheel module, allowing to recreate wheels from already installed
-# ones
-# https://github.com/bkabrda/rewheel
-%if 0%{with_rewheel}
-Patch189: 00189-add-rewheel-module.patch
-%endif
-
 # 00194 #
 # Tests requiring SIGHUP to work don't work in Koji
 # see rhbz#1088233
@@ -563,10 +528,6 @@ Provides: python(abi) = %{pybasever}
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
-%if 0%{with_rewheel}
-Requires: python%{iusver}-setuptools
-Requires: python%{iusver}-pip
-%endif
 
 %description
 Python 3 is a new version of the language that is incompatible with the 2.x
@@ -760,10 +721,6 @@ done
 %patch184  -p1
 %patch186 -p1
 %patch188 -p1
-
-%if 0%{with_rewheel}
-%patch189 -p1
-%endif
 
 %patch194 -p1
 %patch203 -p1
@@ -1396,18 +1353,7 @@ rm -fr %{buildroot}
 %dir %{pylibdir}/ensurepip/__pycache__/
 %{pylibdir}/ensurepip/*.py
 %{pylibdir}/ensurepip/__pycache__/*%{bytecode_suffixes}
-%if 0%{?with_rewheel}
-%exclude %{pylibdir}/ensurepip/_bundled
-%else
 %{pylibdir}/ensurepip/_bundled
-%endif
-
-%if 0%{?with_rewheel}
-%dir %{pylibdir}/ensurepip/rewheel/
-%dir %{pylibdir}/ensurepip/rewheel/__pycache__/
-%{pylibdir}/ensurepip/rewheel/*.py
-%{pylibdir}/ensurepip/rewheel/__pycache__/*%{bytecode_suffixes}
-%endif
 
 %{pylibdir}/html
 %{pylibdir}/http
@@ -1658,6 +1604,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Mon Mar 14 2016 Carl George <carl.george@rackspace.com> - 3.4.4-2.ius
+- Disable and remove rewheel
+
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
 - Dropped patches (merged upstream): 202, 204
