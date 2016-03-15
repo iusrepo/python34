@@ -1194,7 +1194,6 @@ CheckPython() {
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
     --verbose --findleaks \
     -x test_distutils \
-    -x test_venv \
     %if 0%{?rhel} < 7
     -x test_readline
     %endif
@@ -1626,6 +1625,7 @@ rm -fr %{buildroot}
 - Move libpython3.4m.so from -devel to -libs
 - Own systemtap dirs
 - Bundled newer wheels of setuptools and pip
+- Re-enable test_venv
 
 * Mon Dec 21 2015 Carl George <carl.george@rackspace.com> - 3.4.4-1.ius
 - Latest upstream
