@@ -7,8 +7,6 @@
 # pybasever without the dot:
 %global pyshortver 34
 
-%global iusver %{pyshortver}u
-
 %if 0%{?rhel} >= 7
 %global _brpdir /usr/lib/rpm
 %global _macrosdir %{_rpmconfigdir}/macros.d
@@ -148,9 +146,9 @@
 # Top-level metadata
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
-Name: python%{iusver}
-Version: %{pybasever}.4
-Release: 2.ius%{?dist}
+Name: python%{pyshortver}u
+Version: %{pybasever}.5
+Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -1618,6 +1616,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Mon Jun 27 2016 Carl George <carl.george@rackspace.com> - 3.4.5-1.ius
+- Latest upstream
+
 * Mon Mar 14 2016 Carl George <carl.george@rackspace.com> - 3.4.4-2.ius
 - Disable and remove rewheel
 - Optionally build against bundled expat
