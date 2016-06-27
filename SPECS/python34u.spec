@@ -111,8 +111,8 @@
 
 # Bundle latest wheels of setuptools and pip.
 %global with_new_wheels 1
-%global setuptools_version 20.2.2
-%global pip_version 8.1.0
+%global setuptools_version 22.0.5
+%global pip_version 8.1.2
 
 # We need to get a newer configure generated out of configure.in for the following
 # patches:
@@ -249,8 +249,10 @@ Source7: pyfuntop.stp
 # Written by bkabrda
 Source8: check-pyc-and-pyo-timestamps.py
 
-Source20: https://pypi.python.org/packages/3.5/s/setuptools/setuptools-%{setuptools_version}-py2.py3-none-any.whl
-Source21: https://pypi.python.org/packages/py2.py3/p/pip/pip-%{pip_version}-py2.py3-none-any.whl
+# https://pypi.python.org/pypi/setuptools
+Source20: https://files.pythonhosted.org/packages/py2.py3/s/setuptools/setuptools-%{setuptools_version}-py2.py3-none-any.whl
+# https://pypi.python.org/pypi/pip
+Source21: https://files.pythonhosted.org/packages/py2.py3/p/pip/pip-%{pip_version}-py2.py3-none-any.whl
 
 # 00001 #
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
@@ -1618,6 +1620,7 @@ rm -fr %{buildroot}
 %changelog
 * Mon Jun 27 2016 Carl George <carl.george@rackspace.com> - 3.4.5-1.ius
 - Latest upstream
+- Include latest wheels of setuptools and pip
 
 * Mon Mar 14 2016 Carl George <carl.george@rackspace.com> - 3.4.4-2.ius
 - Disable and remove rewheel
