@@ -110,9 +110,8 @@
 %endif
 
 # Bundle latest wheels of setuptools and pip.
-%global with_new_wheels 1
-%global setuptools_version 22.0.5
-%global pip_version 8.1.2
+#global setuptools_version 22.0.5
+#global pip_version 8.1.2
 
 # We need to get a newer configure generated out of configure.in for the following
 # patches:
@@ -147,7 +146,7 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}u
-Version: %{pybasever}.5
+Version: %{pybasever}.6
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
@@ -250,9 +249,13 @@ Source7: pyfuntop.stp
 Source8: check-pyc-and-pyo-timestamps.py
 
 # https://pypi.python.org/pypi/setuptools
+%if 0%{?setuptools_version:1}
 Source20: https://files.pythonhosted.org/packages/py2.py3/s/setuptools/setuptools-%{setuptools_version}-py2.py3-none-any.whl
+%endif
 # https://pypi.python.org/pypi/pip
+%if 0%{?pip_version:1}
 Source21: https://files.pythonhosted.org/packages/py2.py3/p/pip/pip-%{pip_version}-py2.py3-none-any.whl
+%endif
 
 # 00001 #
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
@@ -671,13 +674,15 @@ for f in md5module.c sha1module.c sha256module.c sha512module.c; do
     rm Modules/$f
 done
 
-%if 0%{?with_new_wheels}
-sed -r \
-  -e '/^_SETUPTOOLS_VERSION =/ s/"[0-9.]+"/"%{setuptools_version}"/' \
-  -e '/^_PIP_VERSION =/ s/"[0-9.]+"/"%{pip_version}"/' \
-  -i Lib/ensurepip/__init__.py
-rm Lib/ensurepip/_bundled/setuptools-*.whl Lib/ensurepip/_bundled/pip-*.whl
-cp -a %{SOURCE20} %{SOURCE21} Lib/ensurepip/_bundled/
+%if 0%{?setuptools_version:1}
+sed -r -e '/^_SETUPTOOLS_VERSION =/ s/"[0-9.]+"/"%{setuptools_version}"/' -i Lib/ensurepip/__init__.py
+rm Lib/ensurepip/_bundled/setuptools-*.whl
+cp -a %{SOURCE20} Lib/ensurepip/_bundled/
+%endif
+%if 0%{?pip_version:1}
+sed -r -e '/^_PIP_VERSION =/ s/"[0-9.]+"/"%{pip_version}"/' -i Lib/ensurepip/__init__.py
+rm Lib/ensurepip/_bundled/pip-*.whl
+cp -a %{SOURCE21} Lib/ensurepip/_bundled/
 %endif
 
 #
@@ -1618,6 +1623,11 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Tue Jan 17 2017 Ben Harper <ben.harper@rackspace.com> - 3.4.6-1.ius
+- Latest upstream
+- change macros around wheels of setuptools and pip to match python36u:
+  https://github.com/iuscommunity-pkg/python36u/commit/b8d6943042c313ae38ea2bd4b8653acda707cac3
+
 * Mon Jun 27 2016 Carl George <carl.george@rackspace.com> - 3.4.5-1.ius
 - Latest upstream
 - Include latest wheels of setuptools and pip
