@@ -110,8 +110,8 @@
 %endif
 
 # Bundle latest wheels of setuptools and pip.
-#global setuptools_version 22.0.5
-#global pip_version 8.1.2
+#global setuptools_version 28.8.0
+#global pip_version 9.0.1
 
 # We need to get a newer configure generated out of configure.in for the following
 # patches:
