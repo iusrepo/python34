@@ -146,7 +146,7 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}u
-Version: %{pybasever}.6
+Version: %{pybasever}.7
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
@@ -1623,6 +1623,10 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Thu Aug 10 2017 Ben Harper <ben.harper@rackspace.com> - 3.4.7-1.ius
+- Latest upstream
+- refresh Patch55
+
 * Tue Jan 17 2017 Ben Harper <ben.harper@rackspace.com> - 3.4.6-1.ius
 - Latest upstream
 - change macros around wheels of setuptools and pip to match python36u:
