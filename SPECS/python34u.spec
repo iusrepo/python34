@@ -146,7 +146,7 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}u
-Version: %{pybasever}.7
+Version: %{pybasever}.8
 Release: 1.ius%{?dist}
 License: Python
 Group: Development/Languages
@@ -1623,6 +1623,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
+- Latest upstream
+
 * Thu Aug 10 2017 Ben Harper <ben.harper@rackspace.com> - 3.4.7-1.ius
 - Latest upstream
 - refresh Patch55
