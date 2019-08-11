@@ -149,7 +149,6 @@ Name: python%{pyshortver}
 Version: %{pybasever}.8
 Release: 2%{?dist}
 License: Python
-Group: Development/Languages
 # conflict with other IUS python3 packages
 Conflicts: python33
 Conflicts: python32
@@ -556,7 +555,6 @@ considerably, and a lot of deprecated features have finally been removed.
 
 %package libs
 Summary:        Python 3 runtime libraries
-Group:          Development/Libraries
 #Requires:       %{name} = %{version}-%{release}
 
 %if 0%{?with_system_expat}
@@ -575,7 +573,6 @@ This package contains files used to embed Python 3 into applications.
 
 %package devel
 Summary: Libraries and header files needed for Python 3 development
-Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
@@ -594,7 +591,6 @@ with and native libraries for Python 3
 
 %package tools
 Summary: A collection of tools included with Python 3
-Group: Development/Tools
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-tkinter = %{version}-%{release}
 
@@ -610,7 +606,6 @@ This package contains several tools included with Python 3
 
 %package tkinter
 Summary: A GUI toolkit for Python 3
-Group: Development/Languages
 Requires: %{name} = %{version}-%{release}
 
 # Rename from python34u-tkinter
@@ -626,7 +621,6 @@ the Python scripting language.
 
 %package test
 Summary: The test modules from the main python 3 package
-Group: Development/Languages
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-tools = %{version}-%{release}
 
@@ -648,7 +642,6 @@ python 3 code that uses more than just unittest and/or test_support.py.
 %if 0%{?with_debug_build}
 %package debug
 Summary: Debug version of the Python 3 runtime
-Group: Applications/System
 
 # The debug build is an all-in-one package version of the regular build, and
 # shares the same .py/.pyc files and directories as the regular build.  Hence
