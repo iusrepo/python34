@@ -1258,9 +1258,9 @@ rm -fr %{buildroot}
 %postun libs -p /sbin/ldconfig
 
 
-
 %files
-%doc LICENSE README
+%license LICENSE
+%doc README
 %{_bindir}/pydoc*
 %{_bindir}/python3
 %{_bindir}/python%{pybasever}
@@ -1270,7 +1270,8 @@ rm -fr %{buildroot}
 %{_mandir}/*/*
 
 %files libs
-%doc LICENSE README
+%license LICENSE
+%doc README
 %dir %{pylibdir}
 %dir %{dynload_dir}
 %{dynload_dir}/_bisect.%{SOABI_optimized}.so
