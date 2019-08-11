@@ -145,9 +145,9 @@
 # Top-level metadata
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
-Name: python%{pyshortver}u
+Name: python%{pyshortver}
 Version: %{pybasever}.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
@@ -208,6 +208,7 @@ BuildRequires: valgrind-devel
 
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
+
 
 # =======================
 # Source code and patches
@@ -528,6 +529,7 @@ Patch5000: 05000-autotool-intermediates.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
+
 # ======================================================
 # Additional metadata, and subpackages
 # ======================================================
@@ -539,12 +541,18 @@ Provides: python(abi) = %{pybasever}
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
+# Rename from python34u
+Provides: python34u = %{version}-%{release}
+Provides: python34u%{?_isa} = %{version}-%{release}
+Obsoletes: python34u < 3.4.8-2
+
 
 %description
 Python 3 is a new version of the language that is incompatible with the 2.x
 line of releases. The language is mostly the same, but many details, especially
 how built-in objects like dictionaries and strings work, have changed
 considerably, and a lot of deprecated features have finally been removed.
+
 
 %package libs
 Summary:        Python 3 runtime libraries
@@ -555,19 +563,34 @@ Group:          Development/Libraries
 Requires: expat
 %endif
 
+# Rename from python34u-libs
+Provides: python34u-libs = %{version}-%{release}
+Provides: python34u-libs%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-libs < 3.4.8-2
+
+
 %description libs
 This package contains files used to embed Python 3 into applications.
+
 
 %package devel
 Summary: Libraries and header files needed for Python 3 development
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+
+# Rename from python34u-devel
+Provides: python34u-devel = %{version}-%{release}
+Provides: python34u-devel%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-devel < 3.4.8-2
+
 Conflicts: %{name} < %{version}-%{release}
+
 
 %description devel
 This package contains libraries and header files used to build applications
 with and native libraries for Python 3
+
 
 %package tools
 Summary: A collection of tools included with Python 3
@@ -575,23 +598,43 @@ Group: Development/Tools
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-tkinter = %{version}-%{release}
 
+# Rename from python34u-tools
+Provides: python34u-tools = %{version}-%{release}
+Provides: python34u-tools%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-tools < 3.4.8-2
+
+
 %description tools
 This package contains several tools included with Python 3
+
 
 %package tkinter
 Summary: A GUI toolkit for Python 3
 Group: Development/Languages
 Requires: %{name} = %{version}-%{release}
 
+# Rename from python34u-tkinter
+Provides: python34u-tkinter = %{version}-%{release}
+Provides: python34u-tkinter%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-tkinter < 3.4.8-2
+
+
 %description tkinter
 The Tkinter (Tk interface) program is an graphical user interface for
 the Python scripting language.
+
 
 %package test
 Summary: The test modules from the main python 3 package
 Group: Development/Languages
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-tools = %{version}-%{release}
+
+# Rename from python34u-test
+Provides: python34u-test = %{version}-%{release}
+Provides: python34u-test%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-test < 3.4.8-2
+
 
 %description test
 The test modules from the main %{name} package.
@@ -600,6 +643,7 @@ in production.
 
 You might want to install the %{name}-test package if you're developing
 python 3 code that uses more than just unittest and/or test_support.py.
+
 
 %if 0%{?with_debug_build}
 %package debug
@@ -615,6 +659,12 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 Requires: %{name}-test%{?_isa} = %{version}-%{release}
 Requires: %{name}-tkinter%{?_isa} = %{version}-%{release}
 Requires: %{name}-tools%{?_isa} = %{version}-%{release}
+
+# Rename from python34u-debug
+Provides: python34u-debug = %{version}-%{release}
+Provides: python34u-debug%{?_isa} = %{version}-%{release}
+Obsoletes: python34u-debug < 3.4.8-2
+
 
 %description debug
 %{name}-debug provides a version of the Python 3 runtime with numerous debugging
@@ -633,6 +683,7 @@ It shares installation directories with the standard Python 3 runtime, so that
 suffix ("foo_d.so" rather than "foo.so") so that each Python 3 implementation
 can load its own extensions.
 %endif # with_debug_build
+
 
 # ======================================================
 # The prep phase of the build:
@@ -755,6 +806,7 @@ sed --in-place \
 %patch5000 -p0 -b .autotool-intermediates
 %endif
 
+
 # ======================================================
 # Configuring and building the code:
 # ======================================================
@@ -866,6 +918,7 @@ BuildPython optimized \
   python%{pybasever} \
   "--without-ensurepip" \
   true
+
 
 # ======================================================
 # Installing the built code:
@@ -1164,6 +1217,7 @@ echo -e '#!/bin/sh\nexec `dirname $0`/python%{LDVERSION_optimized}-`uname -m`-co
 echo '[ $? -eq 127 ] && echo "Could not find python%{LDVERSION_optimized}-`uname -m`-config. Look around to see available arches." >&2' >> \
   %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
   chmod +x %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
+
 
 # ======================================================
 # Running the upstream test suite
@@ -1623,6 +1677,9 @@ rm -fr %{buildroot}
 # ======================================================
 
 %changelog
+* Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
+- Rename to python34
+
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
 
