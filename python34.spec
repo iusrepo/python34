@@ -98,10 +98,6 @@
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
 
-# Bundle latest wheels of setuptools and pip.
-#global setuptools_version 28.8.0
-#global pip_version 9.0.1
-
 # We need to get a newer configure generated out of configure.in for the following
 # patches:
 #   patch 55 (systemtap)
@@ -241,15 +237,6 @@ Source7: pyfuntop.stp
 # Run in check section with Python that is currently being built
 # Written by bkabrda
 Source8: check-pyc-and-pyo-timestamps.py
-
-# https://pypi.python.org/pypi/setuptools
-%if 0%{?setuptools_version:1}
-Source20: https://files.pythonhosted.org/packages/py2.py3/s/setuptools/setuptools-%{setuptools_version}-py2.py3-none-any.whl
-%endif
-# https://pypi.python.org/pypi/pip
-%if 0%{?pip_version:1}
-Source21: https://files.pythonhosted.org/packages/py2.py3/p/pip/pip-%{pip_version}-py2.py3-none-any.whl
-%endif
 
 # 00001 #
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
@@ -716,17 +703,6 @@ rm -r Modules/zlib || exit 1
 for f in md5module.c sha1module.c sha256module.c sha512module.c; do
     rm Modules/$f
 done
-
-%if 0%{?setuptools_version:1}
-sed -r -e '/^_SETUPTOOLS_VERSION =/ s/"[0-9.]+"/"%{setuptools_version}"/' -i Lib/ensurepip/__init__.py
-rm Lib/ensurepip/_bundled/setuptools-*.whl
-cp -a %{SOURCE20} Lib/ensurepip/_bundled/
-%endif
-%if 0%{?pip_version:1}
-sed -r -e '/^_PIP_VERSION =/ s/"[0-9.]+"/"%{pip_version}"/' -i Lib/ensurepip/__init__.py
-rm Lib/ensurepip/_bundled/pip-*.whl
-cp -a %{SOURCE21} Lib/ensurepip/_bundled/
-%endif
 
 #
 # Apply patches:
@@ -1670,6 +1646,7 @@ rm -fr %{buildroot}
 * Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
 - Rename to python34
 - Always use system expat
+- Always use bundled pip and setuptools wheels
 
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
