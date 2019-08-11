@@ -244,7 +244,7 @@ Source8: check-pyc-and-pyo-timestamps.py
 # 00001 #
 # Fixup distutils/unixccompiler.py to remove standard library path from rpath:
 # Was Patch0 in ivazquez' python3000 specfile:
-Patch1:         Python-3.1.1-rpath.patch
+Patch1:         00001-rpath.patch
 
 # 00055 #
 # Systemtap support: add statically-defined probe points
@@ -1641,6 +1641,8 @@ CheckPython optimized
 - Rename to python34
 - Always use system expat
 - Always use bundled pip and setuptools wheels
+- Use python3 style of calling super() without arguments in rpath
+  patch to prevent recursion in UnixCCompiler subclasses
 
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
