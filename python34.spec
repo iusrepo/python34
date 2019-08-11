@@ -510,8 +510,6 @@ Patch203: 00203-disable-threading-test-koji.patch
 # above:
 Patch5000: 05000-autotool-intermediates.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-
 
 # ======================================================
 # Additional metadata, and subpackages
@@ -1239,14 +1237,6 @@ CheckPython debug
 CheckPython optimized
 
 %endif # run_selftest_suite
-
-
-# ======================================================
-# Cleaning up
-# ======================================================
-
-%clean
-rm -fr %{buildroot}
 
 
 # ======================================================
