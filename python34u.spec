@@ -147,7 +147,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}u
 Version: %{pybasever}.8
-Release: 1.ius%{?dist}
+Release: 1%{?dist}
 License: Python
 Group: Development/Languages
 # conflict with other IUS python3 packages
