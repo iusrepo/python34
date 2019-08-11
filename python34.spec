@@ -8,10 +8,8 @@
 %global pyshortver 34
 
 %if 0%{?rhel} >= 7
-%global _brpdir /usr/lib/rpm
 %global _macrosdir %{_rpmconfigdir}/macros.d
 %else
-%global _brpdir /usr/lib/rpm/redhat
 %global _macrosdir %{_sysconfdir}/rpm
 %endif
 
@@ -89,11 +87,16 @@
 # (/usr/bin/python, rather than the freshly built python), thus leading to
 # numerous syntax errors, and incorrect magic numbers in the .pyc files.  We
 # thus override __os_install_post to avoid invoking this script:
-%global __os_install_post %{_brpdir}/brp-compress \
-  %{!?__debug_package:%{_brpdir}/brp-strip %{__strip}} \
-  %{_brpdir}/brp-strip-static-archive %{__strip} \
-  %{_brpdir}/brp-strip-comment-note %{__strip} %{__objdump} \
-  %{_brpdir}/brp-python-hardlink
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%global brp_python_hardlink /usr/lib/rpm/brp-python-hardlink
+%else
+%global brp_python_hardlink /usr/lib/rpm/redhat/brp-python-hardlink
+%endif
+%global __os_install_post /usr/lib/rpm/brp-compress \
+  %{!?__debug_package:/usr/lib/rpm/brp-strip %{__strip}} \
+  /usr/lib/rpm/brp-strip-static-archive %{__strip} \
+  /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump} \
+  %{brp_python_hardlink}
 # to remove the invocation of brp-python-bytecompile, whilst keeping the
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
