@@ -238,6 +238,10 @@ Source8: check-pyc-and-pyo-timestamps.py
 # Was Patch0 in ivazquez' python3000 specfile:
 Patch1:         00001-rpath.patch
 
+# readline test fails on EL6 readline 6.0
+# https://bugs.python.org/issue19884
+Patch2:         python34-readline.patch
+
 # 00055 #
 # Systemtap support: add statically-defined probe points
 # Patch sent upstream as http://bugs.python.org/issue14776
@@ -696,6 +700,7 @@ done
 # Apply patches:
 #
 %patch1 -p1
+%patch2 -p1 -b .readline
 
 %if 0%{?with_systemtap}
 %patch55 -p1 -b .systemtap
@@ -1232,15 +1237,19 @@ CheckPython() {
   # our non-standard decorators take effect on the relevant tests:
   #   @unittest._skipInRpmBuild(reason)
   #   @unittest._expectedFailureInRpmBuild
-  # test_readline.TestReadline fails on el < 7
-  #   http://bugs.python.org/issue19884
-  #   http://bugs.python.org/issue22773
+  # test_faulthandler.test_register_chain currently fails on ppc64/ppc64le and
+  #   aarch64, see upstream bug http://bugs.python.org/issue21131
   WITHIN_PYTHON_RPM_BUILD= \
   LD_LIBRARY_PATH=$ConfDir $ConfDir/python -m test.regrtest \
     --verbose --findleaks \
     -x test_distutils \
-    %if 0%{?rhel} < 7
-    -x test_readline
+    -x test_ensurepip \
+    -x test_venv \
+    %ifarch %{power64} aarch64
+    -x test_faulthandler \
+    %endif
+    %ifarch %{power64} s390 s390x armv7hl aarch64
+    -x test_gdb
     %endif
 
   echo FINISHED: CHECKING OF PYTHON FOR CONFIGURATION: $ConfName
@@ -1671,6 +1680,7 @@ CheckPython optimized
 %changelog
 * Tue Aug 13 2019 Carl George <carl@george.computer> - 3.4.10-1
 - Latest upstream
+- Sync tests with EPEL package
 
 * Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
 - Rename to python34
