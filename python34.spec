@@ -477,6 +477,11 @@ Patch188: 00188-fix-lib2to3-tests-when-hashlib-doesnt-compile-properly.patch
 # see rhbz#1088233
 Patch194: temporarily-disable-tests-requiring-SIGHUP.patch
 
+# 00196
+#
+#  Fix test_gdb failure on ppc64le
+Patch196: 00196-test-gdb-match-addr-before-builtin.patch
+
 # 00203 #
 # test_threading fails in koji dues to it's handling of signals
 Patch203: 00203-disable-threading-test-koji.patch
@@ -749,6 +754,7 @@ done
 %patch188 -p1
 
 %patch194 -p1
+%patch196 -p1
 %patch203 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
@@ -1681,6 +1687,7 @@ CheckPython optimized
 * Tue Aug 13 2019 Carl George <carl@george.computer> - 3.4.10-1
 - Latest upstream
 - Sync tests with EPEL package
+- Fix test_gdb failure on ppc64le
 
 * Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
 - Rename to python34
