@@ -7,6 +7,13 @@
 # pybasever without the dot:
 %global pyshortver 34
 
+# is this the EPEL 7 main Python 3?
+%if "%python3_pkgversion" == "%pyshortver"
+%global main_python3 1
+%else
+%global main_python3 0
+%endif
+
 %global pylibdir %{_libdir}/python%{pybasever}
 %global dynload_dir %{pylibdir}/lib-dynload
 
@@ -550,7 +557,11 @@ Summary: Libraries and header files needed for Python 3 development
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: python-rpm-macros
+%if 0%{?main_python3}
 Requires: python3-rpm-macros
+%else
+Requires: python3-other-rpm-macros
+%endif
 
 # Rename from python34u-devel
 Provides: python34u-devel = %{version}-%{release}
@@ -896,7 +907,12 @@ InstallPython() {
 
   pushd $ConfDir
 
-make install DESTDIR=%{buildroot} INSTALL="install -p" EXTRA_CFLAGS="$MoreCFlags"
+%if 0%{?main_python3}
+make install \
+%else
+make altinstall \
+%endif
+  DESTDIR=%{buildroot} INSTALL="install -p" EXTRA_CFLAGS="$MoreCFlags"
 
   popd
 
@@ -941,6 +957,15 @@ make install DESTDIR=%{buildroot} INSTALL="install -p" EXTRA_CFLAGS="$MoreCFlags
 InstallPython debug \
   %{py_INSTSONAME_debug} \
   -O0
+
+%if ! 0%{?main_python3}
+# altinstall only creates pkgconfig/python-3.4.pc, not the version with ABIFAGS,
+#  so we need to move the debug .pc file to not overwrite it by optimized install
+mv \
+  %{buildroot}%{_libdir}/pkgconfig/python-%{pybasever}.pc \
+  %{buildroot}%{_libdir}/pkgconfig/python-%{LDVERSION_debug}.pc
+%endif
+
 %endif # with_debug_build
 
 # Now the optimized build:
@@ -949,7 +974,9 @@ InstallPython optimized \
 
 install -d -m 0755 ${RPM_BUILD_ROOT}%{pylibdir}/site-packages/__pycache__
 
+%if 0%{main_python3}
 mv ${RPM_BUILD_ROOT}%{_bindir}/2to3 ${RPM_BUILD_ROOT}%{_bindir}/2to3-3
+%endif
 
 # Development tools
 install -m755 -d ${RPM_BUILD_ROOT}%{pylibdir}/Tools
@@ -1122,9 +1149,11 @@ ln -s \
   %{_bindir}/python%{LDVERSION_debug} \
   %{buildroot}%{_bindir}/python%{pybasever}-debug
 
+%if 0%{main_python3}
 ln -s \
   %{_bindir}/python%{pybasever}-debug \
   %{buildroot}%{_bindir}/python3-debug
+%endif
 %endif
 
 #
@@ -1167,6 +1196,24 @@ echo -e '#!/bin/sh\nexec `dirname $0`/python%{LDVERSION_optimized}-`uname -m`-co
 echo '[ $? -eq 127 ] && echo "Could not find python%{LDVERSION_optimized}-`uname -m`-config. Look around to see available arches." >&2' >> \
   %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
   chmod +x %{buildroot}%{_bindir}/python%{LDVERSION_optimized}-config
+
+%if ! 0%{?main_python3}
+# make altinstall doesn't create python3.X-config, but we want it
+#  (we don't want to have just python3.Xm-config, that's a bit confusing)
+ln -s \
+  %{_bindir}/python%{LDVERSION_optimized}-config \
+  %{buildroot}%{_bindir}/python%{pybasever}-config
+# make altinstall doesn't create python-3.4m.pc, only python-3.4.pc, but we want both
+ln -s \
+  %{_libdir}/pkgconfig/python-%{pybasever}.pc \
+  %{buildroot}%{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
+%endif
+
+# remove libpython3.so in EPEL non-main python to not cause collision
+# between python3X and python3X+1 stacks...
+%if ! 0%{?main_python3}
+rm -f %{buildroot}%{_libdir}/libpython3.so
+%endif
 
 
 # ======================================================
@@ -1235,10 +1282,14 @@ CheckPython optimized
 %license LICENSE
 %doc README
 %{_bindir}/pydoc*
+%if 0%{?main_python3}
 %{_bindir}/python3
+%endif
 %{_bindir}/python%{pybasever}
 %{_bindir}/python%{pybasever}m
+%if 0%{?main_python3}
 %{_bindir}/pyvenv
+%endif
 %{_bindir}/pyvenv-%{pybasever}
 %{_mandir}/*/*
 
@@ -1437,7 +1488,10 @@ CheckPython optimized
 %{_includedir}/python%{LDVERSION_optimized}/%{_pyconfig_h}
 
 %{_libdir}/%{py_INSTSONAME_optimized}
+# removed in EPEL, see explanation in install section
+%if 0%{?main_python3}
 %{_libdir}/libpython3.so
+%endif
 %{_libdir}/libpython%{LDVERSION_optimized}.so
 %if 0%{?with_systemtap}
 %dir %(dirname %{tapsetdir})
@@ -1452,16 +1506,22 @@ CheckPython optimized
 %{_includedir}/python%{LDVERSION_optimized}/*.h
 %exclude %{_includedir}/python%{LDVERSION_optimized}/%{_pyconfig_h}
 %doc Misc/README.valgrind Misc/valgrind-python.supp Misc/gdbinit
+%if 0%{?main_python3}
 %{_bindir}/python3-config
+%endif
 %{_bindir}/python%{pybasever}-config
 %{_bindir}/python%{LDVERSION_optimized}-config
 %{_bindir}/python%{LDVERSION_optimized}-*-config
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
+%if 0%{?main_python3}
 %{_libdir}/pkgconfig/python3.pc
+%endif
 
 %files tools
+%if 0%{?main_python3}
 %{_bindir}/2to3-3
+%endif
 %{_bindir}/2to3-%{pybasever}
 %{_bindir}/idle*
 %{pylibdir}/Tools
@@ -1504,7 +1564,9 @@ CheckPython optimized
 
 # Analog of the core subpackage's files:
 %{_bindir}/python%{LDVERSION_debug}
+%if 0%{?main_python3}
 %{_bindir}/python3-debug
+%endif
 %{_bindir}/python%{pybasever}-debug
 
 # Analog of the -libs subpackage's files:
@@ -1625,6 +1687,7 @@ CheckPython optimized
 - Use python3 style of calling super() without arguments in rpath
   patch to prevent recursion in UnixCCompiler subclasses
 - Use macros from python-rpm-macros and python3-rpm-macros
+- Use EPEL's main_python3 setup
 
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
