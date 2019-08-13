@@ -7,12 +7,6 @@
 # pybasever without the dot:
 %global pyshortver 34
 
-%if 0%{?rhel} >= 7
-%global _macrosdir %{_rpmconfigdir}/macros.d
-%else
-%global _macrosdir %{_sysconfdir}/rpm
-%endif
-
 %global pylibdir %{_libdir}/python%{pybasever}
 %global dynload_dir %{pylibdir}/lib-dynload
 
@@ -213,15 +207,6 @@ Source: http://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
 Source1: find-provides-without-python-sonames.sh
 %global _use_internal_dependency_generator 0
 %global __find_provides %{SOURCE1}
-
-# Supply various useful macros for building python 3 modules:
-#  __python3, python3_sitelib, python3_sitearch
-Source2: macros.python%{pybasever}
-
-# Supply an RPM macro "py_byte_compile" for the python3-devel subpackage
-# to enable specfiles to selectively byte-compile individual files and paths
-# with different Python runtimes as necessary:
-Source3: macros.pybytecompile%{pybasever}
 
 # Systemtap tapset to make it easier to use the systemtap static probes
 # (actually a template; LIBRARY_PATH will get fixed up during install)
@@ -564,6 +549,8 @@ This package contains files used to embed Python 3 into applications.
 Summary: Libraries and header files needed for Python 3 development
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+Requires: python-rpm-macros
+Requires: python3-rpm-macros
 
 # Rename from python34u-devel
 Provides: python34u-devel = %{version}-%{release}
@@ -1106,10 +1093,6 @@ find %{buildroot} -type f -a -name "*.py" -print0 | \
 find %{buildroot} \
     -perm 555 -exec chmod 755 {} \;
 
-# Install macros for rpm:
-install -Dm0644 %{SOURCE2} %{buildroot}%{_macrosdir}/macros.python%{pybasever}
-install -Dm0644 %{SOURCE3} %{buildroot}%{_macrosdir}/macros.pybytecompile%{pybasever}
-
 # Ensure that the curses module was linked against libncursesw.so, rather than
 # libncurses.so (bug 539917)
 ldd %{buildroot}/%{dynload_dir}/_curses*.so \
@@ -1476,8 +1459,6 @@ CheckPython optimized
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
 %{_libdir}/pkgconfig/python3.pc
-%{_macrosdir}/macros.python%{pybasever}
-%{_macrosdir}/macros.pybytecompile%{pybasever}
 
 %files tools
 %{_bindir}/2to3-3
@@ -1643,6 +1624,7 @@ CheckPython optimized
 - Always use bundled pip and setuptools wheels
 - Use python3 style of calling super() without arguments in rpath
   patch to prevent recursion in UnixCCompiler subclasses
+- Use macros from python-rpm-macros and python3-rpm-macros
 
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
