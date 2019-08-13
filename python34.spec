@@ -64,7 +64,7 @@
 %global with_systemtap 1
 
 # some arches don't have valgrind so we need to disable its support on them
-%ifnarch s390 ppc64le
+%ifnarch s390
 %global with_valgrind 1
 %else
 %global with_valgrind 0
@@ -135,9 +135,10 @@
 # ==================
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}
-Version: %{pybasever}.8
-Release: 2%{?dist}
+Version: %{pybasever}.10
+Release: 1%{?dist}
 License: Python
+
 # conflict with other IUS python3 packages
 Conflicts: python33
 Conflicts: python32
@@ -154,7 +155,6 @@ BuildRequires: autoconf
 BuildRequires: bluez-libs-devel
 BuildRequires: bzip2
 BuildRequires: bzip2-devel
-BuildRequires: db4-devel >= 4.7
 
 # expat 2.1.0 added the symbol XML_SetHashSalt without bumping SONAME.  We use
 # it (in pyexpat) in order to enable the fix in Python-3.2.3 for CVE-2012-0876:
@@ -207,7 +207,7 @@ BuildRequires: zlib-devel
 # Source code and patches
 # =======================
 
-Source: http://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
+Source: https://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
 
 # Avoid having various bogus auto-generated Provides lines for the various
 # python c modules' SONAMEs:
@@ -479,23 +479,12 @@ Patch203: 00203-disable-threading-test-koji.patch
 
 # (New patches go here ^^^)
 #
-# When adding new patches to "python" and "python3" in Fedora 17 onwards,
-# please try to keep the patch numbers in-sync between the two specfiles:
+# When adding new patches to "python" and "python3" in Fedora, EL, etc.,
+# please try to keep the patch numbers in-sync between all specfiles.
 #
-#   - use the same patch number across both specfiles for conceptually-equivalent
-#     fixes, ideally with the same name
+# More information, and a patch number catalog, is at:
 #
-#   - when a patch is relevant to both specfiles, use the same introductory
-#     comment in both specfiles where possible (to improve "diff" output when
-#     comparing them)
-#
-#   - when a patch is only relevant for one of the two specfiles, leave a gap
-#     in the patch numbering in the other specfile, adding a comment when
-#     omitting a patch, both in the manifest section here, and in the "prep"
-#     phase below
-#
-# Hopefully this will make it easier to ensure that all relevant fixes are
-# applied to both versions.
+#     https://fedoraproject.org/wiki/SIGs/Python/PythonPatches
 
 # This is the generated patch to "configure"; see the description of
 #   %{regenerate_autotooling_patch}
@@ -1680,6 +1669,9 @@ CheckPython optimized
 # ======================================================
 
 %changelog
+* Tue Aug 13 2019 Carl George <carl@george.computer> - 3.4.10-1
+- Latest upstream
+
 * Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
 - Rename to python34
 - Always use system expat
