@@ -1492,7 +1492,6 @@ CheckPython optimized
 %if 0%{?main_python3}
 %{_libdir}/libpython3.so
 %endif
-%{_libdir}/libpython%{LDVERSION_optimized}.so
 %if 0%{?with_systemtap}
 %dir %(dirname %{tapsetdir})
 %dir %{tapsetdir}
@@ -1512,6 +1511,7 @@ CheckPython optimized
 %{_bindir}/python%{pybasever}-config
 %{_bindir}/python%{LDVERSION_optimized}-config
 %{_bindir}/python%{LDVERSION_optimized}-*-config
+%{_libdir}/libpython%{LDVERSION_optimized}.so
 %{_libdir}/pkgconfig/python-%{LDVERSION_optimized}.pc
 %{_libdir}/pkgconfig/python-%{pybasever}.pc
 %if 0%{?main_python3}
@@ -1688,6 +1688,7 @@ CheckPython optimized
   patch to prevent recursion in UnixCCompiler subclasses
 - Use macros from python-rpm-macros and python3-rpm-macros
 - Use EPEL's main_python3 setup
+- Move libpython3.4m.so to python34-devel
 
 * Mon Feb 05 2018 Ben Harper <ben.harper@rackspace.com> - 3.4.8-1.ius
 - Latest upstream
