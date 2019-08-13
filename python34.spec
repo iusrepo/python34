@@ -257,10 +257,6 @@ Patch102: 00102-lib64.patch
 # Another lib64 fix, for distutils/tests/test_install.py; not upstream:
 Patch104: 00104-lib64-fix-for-test_install.patch
 
-# 00105 #
-# revert change to insure that Patch102 works correctly
-Patch105: 00105-LIBPL-fix.patch
-
 # 00111 #
 # Patch the Makefile.pre.in so that the generated Makefile doesn't try to build
 # a libpythonMAJOR.MINOR.a (bug 550692):
@@ -485,6 +481,11 @@ Patch196: 00196-test-gdb-match-addr-before-builtin.patch
 # 00203 #
 # test_threading fails in koji dues to it's handling of signals
 Patch203: 00203-disable-threading-test-koji.patch
+
+# 00205 #
+# LIBPL variable in makefile takes LIBPL from configure.ac
+# but the LIBPL variable defined there doesn't respect libdir macro
+Patch205: 00205-make-libpl-respect-lib64.patch
 
 # (New patches go here ^^^)
 #
@@ -714,7 +715,6 @@ done
 %if "%{_lib}" == "lib64"
 %patch102 -p1
 %patch104 -p1
-%patch105 -p1
 %endif
 
 
@@ -756,6 +756,7 @@ done
 %patch194 -p1
 %patch196 -p1
 %patch203 -p1
+%patch205 -p1
 
 # Currently (2010-01-15), http://docs.python.org/library is for 2.6, and there
 # are many differences between 2.6 and the Python 3 library.
@@ -1688,6 +1689,7 @@ CheckPython optimized
 - Latest upstream
 - Sync tests with EPEL package
 - Fix test_gdb failure on ppc64le
+- Replace patch105 with patch205 from EPEL
 
 * Sun Aug 11 2019 Carl George <carl@george.computer> - 3.4.8-2
 - Rename to python34
