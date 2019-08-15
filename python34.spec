@@ -136,7 +136,7 @@
 Summary: Version 3 of the Python programming language aka Python 3000
 Name: python%{pyshortver}
 Version: %{pybasever}.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: Python
 
 # conflict with other IUS python3 packages
@@ -1687,6 +1687,9 @@ CheckPython optimized
 # ======================================================
 
 %changelog
+* Thu Aug 15 2019 Carl George <carl@george.computer> - 3.4.10-3
+- Bump release to higher than EPEL package
+
 * Thu Aug 15 2019 Carl George <carl@george.computer> - 3.4.10-2
 - Skip test_shutil and test_subprocess, which only fail in Cirrus
 
